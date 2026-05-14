@@ -1021,7 +1021,6 @@ function updateClock(){setText('clock',new Date().toLocaleTimeString('fr-FR',{ho
 function buildUI(){
   byId('tabs').innerHTML=CATS.map(([cat,label],i)=>`<div class="ntab ${i===0?'on':''}" data-cat="${safeAttr(cat)}">${safe(label)}</div>`).join('');
   byId('filters').innerHTML=FILTERS.map(([kw,label],i)=>`<div class="chip ${i===0?'on':''} ${kw==='__COMP__'?'comp':''}" data-filter="${safeAttr(kw)}">${safe(label)}</div>`).join('');
-  byId('lang-menu').innerHTML=LANGS.map(([code,flag,name])=>`<div class="lang-option" data-lang="${code}" data-flag="${flag}" data-name="${safeAttr(name)}">${flag} ${safe(name)}</div>`).join('');
   byId('export-format').innerHTML=['pdf','txt','csv','md','json'].map((f,i)=>`<div class="fmt-btn ${i===0?'on':''}" data-fmt="${f}">${f==='md'?'Markdown':f.toUpperCase()}</div>`).join('');
   byId('trend-list').innerHTML=[['Immersive Venues',94],['AI × Nightlife',87],['Sober Economy',82],['Biometric VIP',76],['Hotel × Club',71],['Dynamic Pricing',68]].map(([n,v],i)=>`<div class="trend-item"><div class="trend-row"><span class="trend-name">${safe(n)}</span><span class="trend-pct">${v}</span></div><div class="trend-track"><div class="trend-fill ${i%2?'blue':''}" style="width:${v}%"></div></div></div>`).join('');
   byId('src-list').innerHTML=FEEDS.slice(0,10).map(f=>`<div class="src-item"><div class="src-dot" style="background:${CAT_COLORS[f.cat]||'#888'}"></div>${safe(f.name)}<span class="src-ok">✓</span></div>`).join('');
