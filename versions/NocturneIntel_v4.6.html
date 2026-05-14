@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOCTURNE INTEL</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f5f3ef;
+  --surface:#ffffff;
+  --border:#e2ddd6;
+  --border2:#c8c2b8;
+  --text:#1a1814;
+  --muted:#6b6560;
+  --dim:#9c9690;
+  --gold:#8b6914;
+  --gold-bg:#fdf6e3;
+  --gold-bdr:#d4a929;
+  --red:#b83225;
+  --red-bg:#fdf0ee;
+  --blue:#1a4a7a;
+  --blue-bg:#eef3fa;
+  --green:#1a6b3c;
+  --green-bg:#eef7f2;
+  --purple:#6b3fa0;
+  --teal:#1a6b6b;
+
+  /* catégories — lisibles sur fond clair */
+  --c-nightlife:#8b6914;
+  --c-music:#b83225;
+  --c-culture:#6b3fa0;
+  --c-tech:#1a4a7a;
+  --c-luxury:#5d4e37;
+  --c-biz:#1a6b3c;
+}
+
+html{font-size:14px}
+body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospace;font-weight:300;min-height:100vh;overflow-x:hidden}
+
+/* ─── HEADER ─── */
+header{background:var(--surface);border-bottom:2px solid var(--text);padding:0 28px;display:flex;align-items:center;height:60px;gap:20px;position:sticky;top:0;z-index:200}
+.logo{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:6px;color:var(--text);display:flex;align-items:center;gap:9px;flex-shrink:0}
+.pip{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hsep{flex:1}
+.live-tag{display:flex;align-items:center;gap:6px;font-size:9px;letter-spacing:3px;color:var(--red);font-weight:500}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse .9s ease-in-out infinite}
+#clock{font-size:10px;letter-spacing:2px;color:var(--muted)}
+.vip-badge{background:var(--text);color:var(--surface);font-size:9px;letter-spacing:3px;padding:5px 12px}
+
+/* ─── SUBNAV ─── */
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;display:flex;gap:0;overflow-x:auto;position:sticky;top:60px;z-index:199}
+nav::-webkit-scrollbar{display:none}
+.ntab{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:11px 16px;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .15s;user-select:none;font-weight:400}
+.ntab:hover{color:var(--text)}
+.ntab.on{color:var(--gold);border-bottom-color:var(--gold);font-weight:500}
+
+/* ─── SELECTION BAR (apparaît quand sélection active) ─── */
+#sel-bar{display:none;background:var(--blue);color:#fff;padding:10px 28px;align-items:center;gap:16px;position:sticky;top:103px;z-index:198}
+#sel-bar.on{display:flex}
+.sel-count{font-size:11px;letter-spacing:1px;font-weight:500}
+.sel-actions{display:flex;gap:8px;margin-left:auto}
+.sel-btn{font-size:9px;letter-spacing:2px;text-transform:uppercase;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:5px 14px;cursor:pointer;transition:all .15s;font-family:'IBM Plex Mono',monospace}
+.sel-btn:hover{background:rgba(255,255,255,.3)}
+.sel-btn.danger{background:rgba(184,50,37,.5);border-color:rgba(184,50,37,.7)}
+
+/* ─── LAYOUT ─── */
+.app{display:grid;grid-template-columns:260px 1fr 260px;min-height:calc(100vh - 103px)}
+
+/* ─── LEFT ─── */
+.left-col{background:var(--surface);border-right:1px solid var(--border);padding:20px;display:flex;flex-direction:column;gap:24px;overflow-y:auto;max-height:calc(100vh - 103px);position:sticky;top:103px}
+.left-col::-webkit-scrollbar{width:3px}
+.left-col::-webkit-scrollbar-thumb{background:var(--border2)}
+.sec-title{font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);font-weight:500;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-box{background:var(--bg);border:1px solid var(--border);padding:11px}
+.stat-num{font-family:'Bebas Neue',cursive;font-size:28px;line-height:1;color:var(--text)}
+.stat-num.gold{color:var(--gold)}.stat-num.red{color:var(--red)}.stat-num.blue{color:var(--blue)}.stat-num.purple{color:var(--purple)}
+.stat-lbl{font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.trend-list{display:flex;flex-direction:column;gap:9px}
+.trend-item{display:flex;flex-direction:column;gap:3px}
+.trend-row{display:flex;justify-content:space-between;align-items:center}
+.trend-name{font-size:11px;color:var(--text)}
+.trend-pct{font-family:'Bebas Neue',cursive;font-size:15px;color:var(--gold)}
+.trend-track{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.trend-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 1.2s ease}
+.trend-fill.blue{background:var(--blue)}
+.src-list{display:flex;flex-direction:column;gap:3px}
+.src-item{display:flex;align-items:center;gap:7px;padding:5px 7px;font-size:10px;color:var(--muted);cursor:pointer;border:1px solid transparent;transition:all .12s}
+.src-item:hover{background:var(--bg);border-color:var(--border);color:var(--text)}
+.src-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.src-ok{margin-left:auto;font-size:9px;color:var(--green)}
+.scr-btn{width:100%;padding:10px;background:var(--text);color:var(--surface);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;transition:background .15s}
+.scr-btn:hover{background:var(--gold)}
+.scr-btn:disabled{opacity:.5;cursor:not-allowed}
+#scr-msg{font-size:10px;color:var(--muted);margin-top:6px;display:none;text-align:center}
+
+/* ─── CENTER ─── */
+.center-col{background:var(--bg);display:flex;flex-direction:column}
+.stat-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border)}
+.sbc{background:var(--surface);padding:12px 14px}
+.sbc-val{font-family:'Bebas Neue',cursive;font-size:28px;line-height:1;color:var(--text)}
+.sbc-val.gold{color:var(--gold)}.sbc-val.red{color:var(--red)}.sbc-val.blue{color:var(--blue)}
+.sbc-lbl{font-size:7px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.sbc-sub{font-size:9px;color:var(--gold);margin-top:1px}
+.search-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:9px 18px;display:flex;gap:9px;align-items:center}
+.search-input{flex:1;background:var(--bg);border:1px solid var(--border);padding:7px 11px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);outline:none;transition:border-color .15s}
+.search-input:focus{border-color:var(--gold)}
+.search-input::placeholder{color:var(--dim)}
+select.sort-sel{font-family:'IBM Plex Mono',monospace;font-size:10px;border:1px solid var(--border);padding:7px 8px;background:var(--surface);color:var(--text);outline:none;cursor:pointer}
+.go-btn{background:var(--text);color:var(--surface);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;border:none;padding:7px 14px;cursor:pointer;transition:background .15s;white-space:nowrap}
+.go-btn:hover{background:var(--gold)}
+.go-btn.outline{background:none;border:1px solid var(--border2);color:var(--text)}
+.go-btn.outline:hover{background:var(--text);color:var(--surface);border-color:var(--text)}
+.go-btn.danger{background:var(--red)}
+.go-btn.danger:hover{background:#8b1f16}
+.filters{background:var(--surface);border-bottom:1px solid var(--border);padding:7px 18px;display:flex;gap:5px;flex-wrap:wrap}
+.chip{font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .12s;user-select:none;background:var(--surface)}
+.chip:hover{border-color:var(--border2);color:var(--text)}
+.chip.on{border-color:var(--gold);color:var(--gold);background:var(--gold-bg);font-weight:500}
+.chip.comp.on{border-color:var(--purple);color:var(--purple);background:#f5eeff}
+
+/* ─── FEED ─── */
+#feed{padding:0 18px 80px;overflow-y:auto;flex:1}
+#feed::-webkit-scrollbar{width:4px}
+#feed::-webkit-scrollbar-thumb{background:var(--border2)}
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:60px}
+.spinner{width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-text{font-size:10px;letter-spacing:3px;color:var(--muted)}
+.empty-state{padding:60px 20px;text-align:center;font-size:12px;color:var(--muted);line-height:2.2}
+
+/* ─── ARTICLE CARD ─── */
+.article{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--border2);margin-top:10px;padding:14px 16px 14px 14px;cursor:pointer;transition:all .15s;animation:fadeup .3s ease backwards;display:grid;grid-template-columns:20px 1fr;gap:10px;align-items:start}
+@keyframes fadeup{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.article:hover{border-left-width:4px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.article.selected{background:var(--gold-bg);border-left-color:var(--gold);outline:2px solid var(--gold-bdr)}
+.article.urgency-now{border-left-color:var(--red)}
+.article.urgency-today{border-left-color:var(--blue)}
+
+/* checkbox */
+.art-check{width:16px;height:16px;border:1.5px solid var(--border2);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:all .12s}
+.art-check:hover{border-color:var(--gold)}
+.art-check.checked{background:var(--gold);border-color:var(--gold)}
+.art-check.checked::after{content:'✓';color:#fff;font-size:10px;font-weight:500;line-height:1}
+
+.art-body{min-width:0}
+.art-meta{display:flex;align-items:center;gap:7px;margin-bottom:5px;flex-wrap:wrap}
+.art-source{font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:500}
+.art-cat{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.badge{font-size:8px;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;font-weight:500}
+.badge-now{background:var(--red-bg);color:var(--red);border:1px solid var(--red)}
+.badge-today{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue)}
+.badge-wiki{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-bdr)}
+.badge-comp{background:#f5eeff;color:var(--purple);border:1px solid #c39bd3}
+.art-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:400;line-height:1.35;color:var(--text);margin-bottom:5px;transition:color .15s}
+.article:hover .art-title{color:var(--gold)}
+.article.selected .art-title{color:var(--gold)}
+.art-excerpt{font-size:11px;color:var(--muted);line-height:1.7;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:7px}
+.art-foot{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.art-time{font-size:9px;letter-spacing:1px;color:var(--dim)}
+.art-tag{font-size:9px;padding:1px 6px;background:var(--bg);border:1px solid var(--border);color:var(--muted)}
+.art-heat{margin-left:auto;font-family:'Bebas Neue',cursive;font-size:20px;line-height:1;color:var(--border2)}
+.art-heat.high{color:var(--gold)}.art-heat.max{color:var(--red)}
+
+/* DRAPEAU LANGUE */
+.lang-flag{font-size:13px;cursor:default}
+.badge-translate{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue);cursor:pointer;font-size:8px;padding:2px 7px;letter-spacing:1px}
+.badge-translate:hover{background:var(--blue);color:#fff}
+
+/* TRADUCTION INLINE CARD */
+.art-tr{background:var(--blue-bg);border:1px solid var(--blue);padding:10px 12px;margin:6px 0;border-radius:0}
+
+/* SHARE ROW SUR LA CARD */
+.art-share-row{display:flex;align-items:center;gap:4px;margin-left:auto}
+.art-share-btn{display:inline-flex;align-items:center;justify-content:center;width:26px;height:22px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:10px;cursor:pointer;transition:all .12s;text-decoration:none;font-family:'IBM Plex Mono',monospace;flex-shrink:0}
+.art-share-btn:hover{background:var(--text);color:var(--surface);border-color:var(--text)}
+.art-share-btn.tw:hover{background:#000;border-color:#000;color:#fff}
+.art-share-btn.wa:hover{background:#25d366;border-color:#25d366;color:#fff}
+.art-share-btn.li:hover{background:#0077b5;border-color:#0077b5;color:#fff}
+.art-share-btn.det{background:var(--gold-bg);color:var(--gold);border-color:var(--gold-bdr);font-weight:500}
+.art-share-btn.det:hover{background:var(--gold);color:#fff}
+
+/* ─── RIGHT ─── */
+.right-col{background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;max-height:calc(100vh - 103px);position:sticky;top:103px}
+.right-col::-webkit-scrollbar{width:3px}
+.right-col::-webkit-scrollbar-thumb{background:var(--border)}
+.rsec{padding:18px;border-bottom:1px solid var(--border)}
+.rsec-title{font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);font-weight:500;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:11px;display:flex;justify-content:space-between;align-items:center}
+.rsec-title span{color:var(--gold)}
+.city-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.city-cell{padding:8px 9px;border:1px solid var(--border);background:var(--bg);cursor:pointer;transition:all .12s}
+.city-cell:hover{border-color:var(--gold-bdr);background:var(--gold-bg)}
+.city-name{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+.city-temp{font-family:'Bebas Neue',cursive;font-size:20px;color:var(--text);line-height:1.1}
+.city-temp.hot{color:var(--gold)}
+.city-status{font-size:8px;color:var(--dim);margin-top:1px}
+.sig-list{display:flex;flex-direction:column;gap:7px}
+.sig{padding:9px 11px;background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--gold)}
+.sig.red{border-left-color:var(--red)}.sig.blue{border-left-color:var(--blue)}
+.sig-type{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:3px;font-weight:500}
+.sig.red .sig-type{color:var(--red)}.sig.blue .sig-type{color:var(--blue)}
+.sig-text{font-family:'Playfair Display',serif;font-size:12px;font-style:italic;color:var(--text);line-height:1.4}
+.sig-from{font-size:8px;color:var(--dim);margin-top:3px}
+.brief-box{background:var(--gold-bg);border:1px solid var(--gold-bdr);padding:12px;font-size:11px;color:var(--text);line-height:1.7;white-space:pre-line;max-height:200px;overflow-y:auto}
+.brief-btn{margin-top:8px;font-size:9px;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--gold-bdr);color:var(--gold);padding:5px 12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s}
+.brief-btn:hover{background:var(--gold);color:#fff}
+
+/* ─── DETAIL PANEL (slide-in, pas overlay) ─── */
+#detail{display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto;padding:0}
+#detail.on{display:block}
+
+.det-topbar{background:var(--surface);border-bottom:2px solid var(--text);padding:0 28px;height:60px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:10}
+.det-back-btn{display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text);cursor:pointer;padding:8px 14px;border:1px solid var(--border2);background:var(--surface);font-family:'IBM Plex Mono',monospace;transition:all .15s}
+.det-back-btn:hover{background:var(--text);color:var(--surface);border-color:var(--text)}
+.det-topbar-source{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:500}
+.det-topbar-sep{flex:1}
+.det-heat{font-family:'Bebas Neue',cursive;font-size:28px;color:var(--gold)}
+.det-urgency{font-size:8px;letter-spacing:3px;padding:3px 10px;font-weight:500}
+
+.det-body{max-width:780px;margin:0 auto;padding:36px 40px 100px}
+.det-title{font-family:'Playfair Display',serif;font-size:34px;font-weight:400;color:var(--text);line-height:1.25;margin-bottom:12px}
+.det-meta{font-size:10px;letter-spacing:1px;color:var(--muted);margin-bottom:8px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.det-city{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue);font-size:9px;letter-spacing:1px;padding:2px 8px}
+.det-relevance{background:var(--gold-bg);border:1px solid var(--gold-bdr);color:var(--gold);padding:10px 14px;font-size:12px;line-height:1.55;margin-bottom:20px;display:none}
+.det-excerpt{font-family:'Playfair Display',serif;font-size:19px;font-weight:400;color:var(--muted);line-height:1.8;margin-bottom:24px}
+.det-comp{background:#f5eeff;border:1px solid #c39bd3;color:var(--purple);padding:9px 14px;font-size:11px;margin-bottom:18px;display:none}
+.det-comp.on{display:block}
+
+/* SHARE ROW inside detail */
+.det-action-row{display:flex;align-items:center;gap:10px;margin-bottom:32px;flex-wrap:wrap}
+.det-read-btn{display:inline-flex;align-items:center;gap:8px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-bdr);padding:9px 18px;text-decoration:none;font-weight:500;transition:all .15s}
+.det-read-btn:hover{background:var(--gold);color:#fff}
+.share-sep{width:1px;height:28px;background:var(--border2)}
+.social-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.social-btn{display:inline-flex;align-items:center;gap:5px;font-size:9px;letter-spacing:1px;padding:8px 12px;border:1px solid var(--border);color:var(--text);cursor:pointer;background:var(--surface);transition:all .15s;text-decoration:none;font-family:'IBM Plex Mono',monospace}
+.social-btn:hover{border-color:var(--text);background:var(--text);color:var(--surface)}
+.social-btn.tw:hover{background:#000;border-color:#000}
+.social-btn.li:hover{background:#0077b5;border-color:#0077b5;color:#fff}
+.social-btn.wa:hover{background:#25d366;border-color:#25d366;color:#fff}
+.social-btn.mail:hover{background:var(--blue);border-color:var(--blue);color:#fff}
+.copy-link-btn{font-size:9px;letter-spacing:1px;padding:8px 12px;border:1px solid var(--border);color:var(--muted);cursor:pointer;background:var(--surface);transition:all .15s;font-family:'IBM Plex Mono',monospace}
+.copy-link-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* DIVIDER in detail */
+.det-divider{height:1px;background:var(--border);margin:28px 0}
+
+/* WIKI inside detail */
+.wiki-heading{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--blue);border-bottom:2px solid var(--blue-bg);padding-bottom:7px;margin-bottom:12px;font-weight:500}
+#wiki-entries{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.we{padding:11px 13px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--blue)}
+.we-meta{font-size:8px;letter-spacing:1px;color:var(--dim);margin-bottom:5px;display:flex;gap:10px}
+.we-meta .role{color:var(--blue);font-weight:500}
+.we-text{font-size:12px;color:var(--text);line-height:1.6}
+.wiki-form{display:flex;flex-direction:column;gap:7px}
+.wiki-ta{background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:12px;padding:10px 12px;resize:vertical;min-height:70px;outline:none;transition:border-color .15s}
+.wiki-ta:focus{border-color:var(--gold)}
+.wiki-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.wiki-input{background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:11px;padding:6px 9px;outline:none}
+.wiki-input:focus{border-color:var(--gold)}
+#wiki-msg{font-size:10px;color:var(--muted)}
+
+/* SHARE block in detail */
+.share-heading{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--gold-bdr);padding-bottom:7px;margin:28px 0 12px;font-weight:500}
+.share-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.share-input{background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:11px;padding:6px 9px;outline:none}
+.share-input:focus{border-color:var(--gold)}
+#share-result{display:none;margin-top:8px;padding:10px 14px;background:var(--gold-bg);border:1px solid var(--gold-bdr);font-size:11px;color:var(--gold);word-break:break-all}
+#share-result.on{display:block}
+.copy-btn{font-size:9px;letter-spacing:1px;color:var(--muted);cursor:pointer;margin-left:8px;transition:color .15s}
+.copy-btn:hover{color:var(--gold)}
+
+/* ─── EXPORT MODAL ─── */
+#export-modal{display:none;position:fixed;inset:0;z-index:500;background:rgba(26,24,20,.5);align-items:center;justify-content:center}
+#export-modal.on{display:flex}
+.export-box{background:var(--surface);border:2px solid var(--text);padding:32px;max-width:520px;width:90%;max-height:80vh;overflow-y:auto}
+.export-title{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:4px;color:var(--text);margin-bottom:6px}
+.export-sub{font-size:10px;color:var(--muted);margin-bottom:20px}
+.export-list{display:flex;flex-direction:column;gap:6px;margin-bottom:20px;max-height:300px;overflow-y:auto}
+.export-item{padding:9px 12px;background:var(--bg);border:1px solid var(--border);font-size:11px;color:var(--text);display:flex;align-items:center;gap:8px}
+.export-item strong{font-family:'Playfair Display',serif;font-size:13px;font-weight:400}
+.export-format{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.fmt-btn{padding:8px 16px;border:1px solid var(--border2);color:var(--text);cursor:pointer;font-size:10px;letter-spacing:2px;text-transform:uppercase;background:var(--surface);transition:all .15s;font-family:'IBM Plex Mono',monospace}
+.fmt-btn:hover,.fmt-btn.on{background:var(--text);color:var(--surface);border-color:var(--text)}
+.export-actions{display:flex;gap:8px}
+.modal-close{position:absolute;top:16px;right:20px;font-size:18px;cursor:pointer;color:var(--muted);transition:color .15s;background:none;border:none}
+.modal-close:hover{color:var(--text)}
+
+/* ─── SÉLECTEUR LANGUE ─── */
+.lang-selector{position:relative;flex-shrink:0}
+.lang-current{font-size:11px;letter-spacing:1px;color:var(--text);cursor:pointer;padding:5px 10px;border:1px solid var(--border);background:var(--surface);user-select:none;white-space:nowrap;transition:border-color .15s}
+.lang-current:hover{border-color:var(--border2)}
+.lang-menu{display:none;position:absolute;top:calc(100% + 4px);right:0;background:var(--surface);border:1px solid var(--border2);min-width:160px;z-index:1000;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+.lang-menu.on{display:block}
+.lang-option{padding:8px 14px;font-size:11px;cursor:pointer;color:var(--text);transition:background .12s;white-space:nowrap}
+.lang-option:hover{background:var(--gold-bg);color:var(--gold)}
+
+/* ─── TICKER ─── */
+.ticker{background:var(--text);height:28px;display:flex;align-items:center;overflow:hidden;position:fixed;bottom:0;left:0;right:0;z-index:100}
+.ticker-lbl{background:var(--gold);color:var(--surface);height:100%;display:flex;align-items:center;padding:0 16px;font-size:8px;letter-spacing:3px;text-transform:uppercase;font-weight:500;flex-shrink:0}
+.ticker-scroll{display:flex;white-space:nowrap;animation:ticker 70s linear infinite;padding-left:40px}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{font-size:10px;letter-spacing:1.5px;color:rgba(245,243,239,.7);padding-right:70px;display:flex;align-items:center;gap:10px}
+.ticker-item::before{content:'·';color:var(--gold);font-size:16px}
+
+/* ─── TOAST ─── */
+#toasts{position:fixed;top:70px;right:20px;z-index:500;display:flex;flex-direction:column;gap:7px;pointer-events:none}
+.toast{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--red);padding:11px 15px;max-width:300px;box-shadow:0 4px 20px rgba(0,0,0,.1);pointer-events:all;animation:toast-in .3s ease}
+.toast.comp{border-left-color:var(--purple)}
+@keyframes toast-in{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.toast-type{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--red);font-weight:500;margin-bottom:3px}
+.toast.comp .toast-type{color:var(--purple)}
+.toast-text{font-size:11px;color:var(--text);line-height:1.4}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:1100px){.app{grid-template-columns:220px 1fr}.right-col{display:none}}
+@media(max-width:700px){.app{grid-template-columns:1fr}.left-col{display:none}.stat-bar{grid-template-columns:repeat(2,1fr)}.det-body{padding:24px 16px 80px}.det-title{font-size:24px}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo"><div class="pip"></div>NOCTURNE INTEL</div>
+  <div class="hsep"></div>
+  <div class="live-tag"><div class="live-dot"></div>LIVE</div>
+  <div id="clock"></div>
+  <!-- SÉLECTEUR DE LANGUE -->
+      <div class="lang-option" onclick="setLang('en','🇬🇧','English')">🇬🇧 English</div>
+      <div class="lang-option" onclick="setLang('de','🇩🇪','Deutsch')">🇩🇪 Deutsch</div>
+      <div class="lang-option" onclick="setLang('es','🇪🇸','Español')">🇪🇸 Español</div>
+      <div class="lang-option" onclick="setLang('it','🇮🇹','Italiano')">🇮🇹 Italiano</div>
+      <div class="lang-option" onclick="setLang('pt','🇵🇹','Português')">🇵🇹 Português</div>
+      <div class="lang-option" onclick="setLang('nl','🇳🇱','Nederlands')">🇳🇱 Nederlands</div>
+      <div class="lang-option" onclick="setLang('ja','🇯🇵','日本語')">🇯🇵 日本語</div>
+      <div class="lang-option" onclick="setLang('ko','🇰🇷','한국어')">🇰🇷 한국어</div>
+      <div class="lang-option" onclick="setLang('ar','🇸🇦','العربية')">🇸🇦 العربية</div>
+    </div>
+  </div>
+  <div class="vip-badge">OWNER</div>
+</header>
+
+<!-- SUBNAV -->
+<nav>
+  <div class="ntab on"  onclick="setTab(this,'')">Tous</div>
+  <div class="ntab" onclick="setTab(this,'nightlife')">Nightlife</div>
+  <div class="ntab" onclick="setTab(this,'tech')">Tech</div>
+  <div class="ntab" onclick="setTab(this,'luxury')">Luxury</div>
+  <div class="ntab" onclick="setTab(this,'music')">Music</div>
+  <div class="ntab" onclick="setTab(this,'culture')">Culture</div>
+  <div class="ntab" onclick="setTab(this,'biz')">Business</div>
+</nav>
+
+<!-- SELECTION BAR -->
+<div id="sel-bar">
+  <span class="sel-count" id="sel-count">0 article sélectionné</span>
+  <div class="sel-actions">
+    <button class="sel-btn" onclick="exportSelected()">📄 Exporter sélection</button>
+    <button class="sel-btn" onclick="shareSelected()">🔗 Partager sélection</button>
+    <button class="sel-btn danger" onclick="clearSelection()">✕ Désélectionner tout</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app">
+
+  <!-- LEFT -->
+  <aside class="left-col">
+    <div>
+      <div class="sec-title">Statistiques</div>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-num gold" id="s-total">—</div><div class="stat-lbl">Signaux</div></div>
+        <div class="stat-box"><div class="stat-num blue" id="s-24h">—</div><div class="stat-lbl">Nouveaux 24h</div></div>
+        <div class="stat-box"><div class="stat-num red"  id="s-now">—</div><div class="stat-lbl">Urgence NOW</div></div>
+        <div class="stat-box"><div class="stat-num purple" id="s-comp">—</div><div class="stat-lbl">Concurrents</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="sec-title">Trend Radar</div>
+      <div class="trend-list">
+        <div class="trend-item"><div class="trend-row"><span class="trend-name">Immersive Venues</span><span class="trend-pct">94</span></div><div class="trend-track"><div class="trend-fill" id="tf1" style="width:0"></div></div></div>
+        <div class="trend-item"><div class="trend-row"><span class="trend-name">AI × Nightlife</span><span class="trend-pct">87</span></div><div class="trend-track"><div class="trend-fill blue" id="tf2" style="width:0"></div></div></div>
+        <div class="trend-item"><div class="trend-row"><span class="trend-name">Sober Economy</span><span class="trend-pct">82</span></div><div class="trend-track"><div class="trend-fill" id="tf3" style="width:0"></div></div></div>
+        <div class="trend-item"><div class="trend-row"><span class="trend-name">Biometric VIP</span><span class="trend-pct">76</span></div><div class="trend-track"><div class="trend-fill blue" id="tf4" style="width:0"></div></div></div>
+        <div class="trend-item"><div class="trend-row"><span class="trend-name">Hotel × Club</span><span class="trend-pct">71</span></div><div class="trend-track"><div class="trend-fill" id="tf5" style="width:0"></div></div></div>
+        <div class="trend-item"><div class="trend-row"><span class="trend-name">Dynamic Pricing</span><span class="trend-pct">68</span></div><div class="trend-track"><div class="trend-fill blue" id="tf6" style="width:0"></div></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="sec-title">Sources actives — <span style="color:var(--gold)">40 feeds</span></div>
+      <div class="src-list">
+        <div class="src-item"><div class="src-dot" style="background:var(--c-nightlife)"></div>Resident Advisor<span class="src-ok">✓</span></div>
+        <div class="src-item"><div class="src-dot" style="background:var(--c-nightlife)"></div>Mixmag<span class="src-ok">✓</span></div>
+        <div class="src-item"><div class="src-dot" style="background:var(--c-nightlife)"></div>DJ Mag<span class="src-ok">✓</span></div>
+        <div class="src-item"><div class="src-dot" style="background:var(--c-nightlife)"></div>Crack Magazine<span class="src-ok">✓</span></div>
+        <div class="src-item"><div class="src-dot" style="background:var(--c-tech)"></div>Wired<span class="src-ok">✓</span></div>
+        <div class="src-item"><div class="src-dot" style="background:var(--c-tech)"></div>TechCrunch<span class="src-ok">✓</span></div>
+        <div class="src-item"><div class="src-dot" style="background:var(--c-luxury)"></div>Robb Report<span class="src-ok">✓</span></div>
+        <div class="src-item"><div class="src-dot" style="background:var(--c-luxury)"></div>Wallpaper*<span class="src-ok">✓</span></div>
+        <div class="src-item"><div class="src-dot" style="background:var(--c-music)"></div>Pitchfork<span class="src-ok">✓</span></div>
+        <div class="src-item"><div class="src-dot" style="background:var(--c-biz)"></div>Skift<span class="src-ok">✓</span></div>
+      </div>
+    </div>
+    <div>
+      <button class="scr-btn" id="scr-btn" onclick="scrape()">↻ Refresh All Feeds</button>
+      <div id="scr-msg"></div>
+    </div>
+  </aside>
+
+  <!-- CENTER -->
+  <main class="center-col">
+    <div class="stat-bar">
+      <div class="sbc"><div class="sbc-val gold" id="sc-total">—</div><div class="sbc-lbl">Signaux affichés</div><div class="sbc-sub" id="sc-time">—</div></div>
+      <div class="sbc"><div class="sbc-val red"  id="sc-now">—</div><div class="sbc-lbl">Urgence NOW</div><div class="sbc-sub">heat ≥ 90</div></div>
+      <div class="sbc"><div class="sbc-val" style="color:var(--purple)" id="sc-comp">—</div><div class="sbc-lbl">Concurrents</div><div class="sbc-sub">hits détectés</div></div>
+      <div class="sbc"><div class="sbc-val gold">40</div><div class="sbc-lbl">Sources RSS</div><div class="sbc-sub">toutes actives</div></div>
+    </div>
+
+    <div class="search-bar">
+      <input class="search-input" id="q" placeholder="Chercher signaux, villes, DJs, tendances..." oninput="deb(render,350)()">
+      <select class="sort-sel" id="sort-sel" onchange="render()">
+        <option value="heat">Par heat score</option>
+        <option value="date">Plus récent</option>
+      </select>
+      <button class="go-btn" onclick="render()">Go</button>
+    </div>
+
+    <div class="filters">
+      <div class="chip on"  onclick="chip(this,'')">Tous</div>
+      <div class="chip" onclick="chip(this,'Ibiza')">Ibiza</div>
+      <div class="chip" onclick="chip(this,'Berlin')">Berlin</div>
+      <div class="chip" onclick="chip(this,'Dubai')">Dubai</div>
+      <div class="chip" onclick="chip(this,'Paris')">Paris</div>
+      <div class="chip" onclick="chip(this,'VIP')">VIP</div>
+      <div class="chip" onclick="chip(this,'AI')">AI</div>
+      <div class="chip" onclick="chip(this,'innovation')">Innovation</div>
+      <div class="chip comp" onclick="chipComp(this)">⚡ Concurrents</div>
+    </div>
+
+    <div id="feed">
+      <div class="loading"><div class="spinner"></div><div class="load-text">Connexion aux sources live...</div></div>
+    </div>
+  </main>
+
+  <!-- RIGHT -->
+  <aside class="right-col">
+    <div class="rsec">
+      <div class="rsec-title">📋 Brief du jour</div>
+      <div class="brief-box" id="brief-box">Chargement...</div>
+      <button class="brief-btn" onclick="loadBrief()">↻ Actualiser</button>
+    </div>
+    <div class="rsec">
+      <div class="rsec-title">City Pulse <span>TONIGHT</span></div>
+      <div class="city-grid">
+        <div class="city-cell"><div class="city-name">Ibiza</div><div class="city-temp hot">99°</div><div class="city-status">Peak Season</div></div>
+        <div class="city-cell"><div class="city-name">Berlin</div><div class="city-temp hot">97°</div><div class="city-status">Berghain Open</div></div>
+        <div class="city-cell"><div class="city-name">Dubai</div><div class="city-temp hot">92°</div><div class="city-status">HNWI Season</div></div>
+        <div class="city-cell"><div class="city-name">Miami</div><div class="city-temp">88°</div><div class="city-status">Ultra Mode</div></div>
+        <div class="city-cell"><div class="city-name">Tokyo</div><div class="city-temp">84°</div><div class="city-status">Ageha Live</div></div>
+        <div class="city-cell"><div class="city-name">Seoul</div><div class="city-temp">81°</div><div class="city-status">Burning Rise</div></div>
+        <div class="city-cell"><div class="city-name">London</div><div class="city-temp">79°</div><div class="city-status">Fabric Wknd</div></div>
+        <div class="city-cell"><div class="city-name">Paris</div><div class="city-temp">75°</div><div class="city-status">Rex Club</div></div>
+      </div>
+    </div>
+    <div class="rsec">
+      <div class="rsec-title">Intel Signals</div>
+      <div class="sig-list">
+        <div class="sig red"><div class="sig-type">Disruption</div><div class="sig-text">Face-pay Fabric London — queues −73%.</div><div class="sig-from">London · 2h ago</div></div>
+        <div class="sig"><div class="sig-type">VIP Signal</div><div class="sig-text">Dubai table min. CHF 8 000 en Q1 2026.</div><div class="sig-from">Dubai · 5h ago</div></div>
+        <div class="sig blue"><div class="sig-type">Tech Move</div><div class="sig-text">AI DJs biométrie crowd BPM temps réel.</div><div class="sig-from">Berlin · 8h ago</div></div>
+        <div class="sig"><div class="sig-type">Trend Shift</div><div class="sig-text">Sober NYC $400M — adaptogens dominent.</div><div class="sig-from">NYC · 12h ago</div></div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- ─── DETAIL PANEL ─── -->
+<div id="detail">
+  <div class="det-topbar">
+    <button class="det-back-btn" onclick="closeDetail()">← Retour au feed</button>
+    <span class="det-topbar-source" id="d-source"></span>
+    <div class="det-topbar-sep"></div>
+    <span class="det-heat" id="d-heat"></span>
+    <span class="det-urgency badge" id="d-urgency-badge"></span>
+  </div>
+  <div class="det-body">
+    <div id="d-title" class="det-title"></div>
+    <div class="det-meta" id="d-meta"></div>
+    <div id="d-relevance" class="det-relevance"></div>
+    <div id="d-excerpt" class="det-excerpt"></div>
+    <div id="d-comp" class="det-comp"></div>
+
+    <!-- ACTIONS : lire + traduction + partage réseaux sociaux -->
+    <div class="det-action-row">
+      <a id="d-link" class="det-read-btn" target="_blank" rel="noopener">Lire l'article ↗</a>
+      <button class="social-btn" id="translate-btn" onclick="translateArticle()" title="Traduire en français">🌐 Traduire</button>
+      <div class="share-sep"></div>
+      <span class="social-label">Partager :</span>
+      <a id="share-tw" class="social-btn tw" target="_blank" rel="noopener">𝕏 Twitter</a>
+      <a id="share-li" class="social-btn li" target="_blank" rel="noopener">in LinkedIn</a>
+      <a id="share-wa" class="social-btn wa" target="_blank" rel="noopener">WhatsApp</a>
+      <a id="share-mail" class="social-btn mail" target="_blank" rel="noopener">✉ Email</a>
+      <button class="copy-link-btn" onclick="copyArticleLink()">🔗 Copier lien</button>
+    </div>
+    <!-- ZONE TRADUCTION -->
+    <div id="translate-box" style="display:none;background:var(--blue-bg);border:1px solid var(--blue);padding:16px 18px;margin-bottom:20px;max-width:680px">
+      <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--blue);font-weight:500;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center">
+        <span id="tr-hdr">🌐 TRADUCTION</span>
+        <span style="cursor:pointer;color:var(--muted);font-size:12px" onclick="closeTranslate()">✕</span>
+      </div>
+      <div id="translate-title" style="font-family:'Playfair Display',serif;font-size:18px;font-weight:400;color:var(--text);margin-bottom:10px;line-height:1.3"></div>
+      <div id="translate-text" style="font-size:13px;color:var(--muted);line-height:1.75"></div>
+    </div>
+
+    <div class="det-divider"></div>
+
+    <!-- WIKI -->
+    <div class="wiki-heading">Wiki — Notes opérateur</div>
+    <div id="wiki-entries"></div>
+    <div class="wiki-form">
+      <textarea class="wiki-ta" id="wi" placeholder="Note stratégique, insight, action à prendre..."></textarea>
+      <div class="wiki-actions">
+        <input class="wiki-input" id="wauth" placeholder="Auteur" value="Owner" style="width:110px">
+        <select class="wiki-input" id="wrole">
+          <option>Owner</option><option>Manager</option><option>Booker</option><option>Marketing</option>
+        </select>
+        <button class="go-btn" onclick="saveWiki()">Sauvegarder</button>
+        <span id="wiki-msg"></span>
+      </div>
+    </div>
+
+    <div class="det-divider"></div>
+
+    <!-- SHARE HORODATÉ -->
+    <div class="share-heading">Partage horodaté</div>
+    <div class="share-row">
+      <input class="share-input" id="s-days" type="number" value="7" min="1" max="30" style="width:55px">
+      <span style="font-size:11px;color:var(--muted)">jours</span>
+      <input class="share-input" id="s-label" placeholder="Label ex: Pour investisseurs" style="width:200px">
+      <button class="go-btn" onclick="makeShare()">Générer lien</button>
+    </div>
+    <div id="share-result"><span id="share-url"></span><span class="copy-btn" onclick="copyShare()">copier</span></div>
+
+    <div class="det-divider"></div>
+
+    <!-- PDF -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="go-btn outline" onclick="exportPDF(7)">Export PDF 7j</button>
+      <button class="go-btn outline" onclick="exportPDF(30)">Export PDF 30j</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── EXPORT MODAL ─── -->
+<div id="export-modal" onclick="closeExportIfBg(event)">
+  <div class="export-box" style="position:relative">
+    <button class="modal-close" onclick="closeExport()">✕</button>
+    <div class="export-title">EXPORT SÉLECTION</div>
+    <div class="export-sub" id="export-sub"></div>
+    <div class="export-list" id="export-list"></div>
+    <div class="export-format">
+      <div class="fmt-btn on" onclick="setFmt(this,'pdf')">PDF</div>
+      <div class="fmt-btn" onclick="setFmt(this,'txt')">TXT</div>
+      <div class="fmt-btn" onclick="setFmt(this,'csv')">CSV</div>
+      <div class="fmt-btn" onclick="setFmt(this,'md')">Markdown</div>
+      <div class="fmt-btn" onclick="setFmt(this,'json')">JSON</div>
+    </div>
+    <div class="export-actions">
+      <button class="go-btn" onclick="doExport()">Télécharger</button>
+      <button class="go-btn" onclick="shareSelectionLink()">🔗 Partager sélection</button>
+      <button class="go-btn outline" onclick="closeExport()">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-lbl">LIVE</div>
+  <div class="ticker-scroll" id="ticker-scroll"></div>
+</div>
+
+<!-- TOASTS -->
+<div id="toasts"></div>
+
+<script>
+'use strict';
+
+const API = 'http://localhost:5050';
+const PROXY = 'https://api.allorigins.win/get?url=';
+const RSS_CACHE_KEY = 'ni_article_url_cache_v2';
+const RSS_PROXY_TIMEOUT = 11000;
+
+function loadUrlCache(){
+  try{return JSON.parse(localStorage.getItem(RSS_CACHE_KEY)||'{}')}catch(e){return {}}
+}
+function saveUrlCache(cache){
+  try{localStorage.setItem(RSS_CACHE_KEY, JSON.stringify(cache))}catch(e){}
+}
+
+// OPTIMISATION 1: Fusionner rememberArticleUrl + rememberArticleUrls
+function rememberArticleUrls(itemsOrItem){
+  const cache = loadUrlCache();
+  let changed = false;
+  const items = Array.isArray(itemsOrItem) ? itemsOrItem : [itemsOrItem];
+  items.forEach(article=>{
+    if(!article || !article.id) return;
+    const url = cleanUrl(article.article_url||article.validated_url||article.url||article.original_url||'',article.source_feed_url||'');
+    if(!url || isBadArticleUrl(url)) return;
+    cache[article.id] = {url,title:article.title||'',source:article.source||'',saved_at:new Date().toISOString()};
+    changed = true;
+  });
+  if(changed) saveUrlCache(cache);
+}
+
+async function fetchTextWithFallbacks(url){
+  const targets = [
+    {kind:'allorigins-json',url:PROXY+encodeURIComponent(url)},
+    {kind:'codetabs',url:'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(url)},
+    {kind:'thingproxy',url:'https://thingproxy.freeboard.io/fetch/'+url},
+    {kind:'direct',url}
+  ];
+  for(const target of targets){
+    try{
+      const r=await fetch(target.url,{signal:AbortSignal.timeout(RSS_PROXY_TIMEOUT)});
+      if(!r.ok) continue;
+      if(target.kind==='allorigins-json'){
+        const d=await r.json();
+        if(d && d.contents && String(d.contents).includes('<')) return d.contents;
+      }else{
+        const txt=await r.text();
+        if(txt && txt.includes('<')) return txt;
+      }
+    }catch(e){}
+  }
+  return '';
+}
+
+const CATS = [
+  ['','Tous'],['nightlife','Nightlife'],['tech','Tech'],['luxury','Luxury'],['music','Music'],['culture','Culture'],['biz','Business']
+];
+const FILTERS = [
+  ['','Tous'],['Ibiza','Ibiza'],['Berlin','Berlin'],['Dubai','Dubai'],['Paris','Paris'],['VIP','VIP'],['AI','AI'],['innovation','Innovation'],['__COMP__','⚡ Competitors']
+];
+// i18n system removed - English-only version
+
+const CAT_COLORS = {nightlife:'#8b6914',music:'#b83225',culture:'#6b3fa0',tech:'#1a4a7a',luxury:'#5d4e37',biz:'#1a6b3c'};
+const NIGHTLIFE_KW = ['club','nightclub','rave','techno','dj','festival','ibiza','berlin','dance','electronic','venue','vip','table','lineup','booking','bar','nightlife','disco','house','trance','edm','concert','gig'];
+const COMPETITORS = ['fabric','berghain','tresor','ushuaia','amnesia','pacha','rex club','shelter','output','dc10','circoloco','egg london','womb','corsica','village underground'];
+const CITIES = ['berlin','ibiza','london','paris','miami','tokyo','dubai','new york','nyc','amsterdam','barcelona','seoul','los angeles','las vegas','prague','budapest','rome','milan','singapore'];
+
+const FEEDS = [
+  {name:'Resident Advisor',url:'https://ra.co/xml/rss.xml',cat:'nightlife'},
+  {name:'Mixmag',url:'https://mixmag.net/rss.xml',cat:'nightlife'},
+  {name:'DJ Mag',url:'https://djmag.com/rss.xml',cat:'nightlife'},
+  {name:'Crack Magazine',url:'https://crackmagazine.net/feed',cat:'nightlife'},
+  {name:'XLR8R',url:'https://xlr8r.com/feed',cat:'nightlife'},
+  {name:'Nocturnal Times',url:'https://thenocturnaltimes.com/feed',cat:'nightlife'},
+  {name:'Pitchfork',url:'https://pitchfork.com/rss/news/feed/rss',cat:'music'},
+  {name:'NME',url:'https://www.nme.com/feed',cat:'music'},
+  {name:'Hypebeast',url:'https://hypebeast.com/feed',cat:'music'},
+  {name:'Wired',url:'https://www.wired.com/feed/rss',cat:'tech'},
+  {name:'TechCrunch',url:'https://techcrunch.com/feed',cat:'tech'},
+  {name:'The Verge',url:'https://www.theverge.com/rss/index.xml',cat:'tech'},
+  {name:'Fast Company',url:'https://www.fastcompany.com/latest/rss',cat:'tech'},
+  {name:'Dezeen',url:'https://feeds.feedburner.com/dezeen',cat:'luxury'},
+  {name:'Wallpaper*',url:'https://www.wallpaper.com/feed/rss',cat:'luxury'},
+  {name:'Robb Report',url:'https://robbreport.com/feed',cat:'luxury'},
+  {name:'Skift',url:'https://skift.com/feed/',cat:'biz'},
+  {name:'Eater',url:'https://www.eater.com/rss/index.xml',cat:'biz'},
+  {name:'Hospitality Net',url:'https://www.hospitalitynet.org/rss/rss_new.xml',cat:'biz'},
+  {name:'Nightclub & Bar',url:'https://www.nightclub.com/feed',cat:'biz'}
+];
+
+const DEMO_ARTICLES = [
+  {id:'d1',source:'Demo Intel',category:'nightlife',title:'Berghain launches private members app to regulate access',url:'',excerpt:'Signal de démonstration : accès digital, gestion de file et sélection club. Lien bascule volontairement vers une recherche exacte.',tags:['Berlin','App','Access'],heat_score:94,city:'berlin',competitor_hit:['berghain'],ingested_at:new Date(Date.now()-7200000).toISOString(),wiki_history:[]},
+  {id:'d2',source:'Demo Intel',category:'nightlife',title:'Ibiza 2026: cashless VIP payments reshape table service',url:'',excerpt:'Signal de démonstration : paiements cashless, VIP, traçabilité et revenus table service.',tags:['Ibiza','Cashless','VIP'],heat_score:91,city:'ibiza',competitor_hit:['ushuaia'],ingested_at:new Date(Date.now()-3600000).toISOString(),wiki_history:[]},
+  {id:'d3',source:'Demo Intel',category:'tech',title:'AI DJs read crowd biometrics in real time',url:'',excerpt:'Signal de démonstration : IA, analyse de foule et synchronisation BPM.',tags:['AI','Berlin','Innovation'],heat_score:88,city:'berlin',competitor_hit:[],ingested_at:new Date(Date.now()-10800000).toISOString(),wiki_history:[]},
+  {id:'d4',source:'Demo Intel',category:'luxury',title:'Dubai VIP table minimums surpass CHF 8,000',url:'',excerpt:'Signal de démonstration : pricing premium et montée en gamme des venues nightlife.',tags:['Dubai','VIP','Pricing'],heat_score:86,city:'dubai',competitor_hit:[],ingested_at:new Date(Date.now()-18000000).toISOString(),wiki_history:[]},
+  {id:'d5',source:'Demo Intel',category:'biz',title:'Sober nightlife becomes a premium revenue stream',url:'',excerpt:'Signal de démonstration : sober economy, adaptogens, revenus hors alcool.',tags:['Sober','Revenue','Strategy'],heat_score:83,city:'new york',competitor_hit:[],ingested_at:new Date(Date.now()-21600000).toISOString(),wiki_history:[]}
+];
+
+// OPTIMISATION 2: Centraliser l'état
+const AppState = {
+  currentCategory: '',
+  compFilterEnabled: false,
+  articles: [],
+  currentItems: [],
+  currentArticle: null,
+  selectedIds: new Set(),
+  exportFormat: 'pdf',
+  dateRange: '7d',
+
+  setCategory(cat){
+    this.currentCategory = cat;
+    this.selectedIds.clear();
+    updateSelBar();
+    render();
+  },
+
+  toggleSelect(id){
+    if(this.selectedIds.has(id)) this.selectedIds.delete(id);
+    else this.selectedIds.add(id);
+    updateSelBar();
+  },
+
+  clearSelection(){
+    this.selectedIds.clear();
+    updateSelBar();
+    render();
+  },
+
+  setArticles(items){
+    this.articles = items;
+    rememberArticleUrls(items);
+  },
+
+  getSelectedArticles(){
+    return Array.from(this.selectedIds)
+      .map(id=>this.articles.find(a=>a.id===id))
+      .filter(Boolean);
+  }
+};
+
+// OPTIMISATION 3: Unified Retry Fetch
+async function retryFetch(fetchers,timeout=7000){
+  for(let i=0;i<fetchers.length;i++){
+    const fetcher = fetchers[i];
+    try{
+      const result = await Promise.race([
+        fetcher(),
+        new Promise((_,r)=>setTimeout(()=>r(new Error('Timeout')),timeout))
+      ]);
+      if(result && String(result).trim()) return result;
+    }catch(e){}
+  }
+  return null;
+}
+
+// OPTIMISATION 4: TranslationObserver - Lazy Loading
+class TranslationObserver {
+  constructor(){
+    this.observer = new IntersectionObserver(e=>this.handle(e),{rootMargin:'100px'});
+    this.translating = new Set();
+  }
+
+  handle(entries){
+    entries.forEach(entry=>{
+      if(!entry.isIntersecting) return;
+      const idx = parseInt(entry.target.dataset.articleIndex,10);
+      const article = AppState.currentItems[idx];
+      if(!article || this.translating.has(article.id)) return;
+
+      const target = currentLanguage();
+      const titleNeedsTranslation = detectLang(article.title||'')!==target;
+      const excerptNeedsTranslation = detectLang(article.excerpt||'')!==target;
+
+      if(!titleNeedsTranslation && !excerptNeedsTranslation) return;
+
+      this.translating.add(article.id);
+      ensureArticleTranslation(article,target).then(()=>{
+        const titleEl = byId('art-title-'+idx);
+        const excEl = byId('art-excerpt-'+idx);
+        if(titleEl) titleEl.textContent = translatedField(article,'title');
+        if(excEl) excEl.textContent = translatedField(article,'excerpt');
+      }).finally(()=>this.translating.delete(article.id));
+    });
+  }
+
+  observe(element){
+    this.observer.observe(element);
+  }
+
+  unobserveAll(){
+    this.observer.disconnect();
+    this.translating.clear();
+  }
+}
+
+const translationManager = new TranslationObserver();
+
+// OPTIMISATION 5: SSEManager - Lifecycle
+const SSEManager = {
+  instance: null,
+  reconnectTimer: null,
+
+  start(){
+    this.stop();
+    try{
+      this.instance = new EventSource(`${API}/api/stream`);
+      this.instance.onmessage = e=>{
+        try{
+          const a = JSON.parse(e.data);
+          showToast(a.type, a.title?.slice(0,70)||'Nouvelle alerte');
+        }catch(_){}
+      };
+      this.instance.onerror = ()=>{
+        this.stop();
+        this.reconnectTimer = setTimeout(()=>this.start(),15000);
+      };
+    }catch(e){
+      this.reconnectTimer = setTimeout(()=>this.start(),15000);
+    }
+  },
+
+  stop(){
+    if(this.reconnectTimer) clearTimeout(this.reconnectTimer);
+    if(this.instance){
+      this.instance.close();
+      this.instance = null;
+    }
+  }
+};
+
+// OPTIMISATION 6: Unified SafeHTML
+const SafeHTML = {
+  escape(str){
+    const map = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
+    return String(str??'').replace(/[&<>"']/g,m=>map[m]);
+  },
+  text(str){ return this.escape(str); },
+  attr(str){ return this.escape(str).replace(/`/g,'&#96;'); }
+};
+
+const safe = (s)=>SafeHTML.text(s);
+const safeAttr = (s)=>SafeHTML.attr(s);
+
+function stripHtml(h){return String(h||'').replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim()}
+function deb(fn,ms){let t;return function(...args){clearTimeout(t);t=setTimeout(()=>fn.apply(this,args),ms)}}
+const renderDebounced = deb(render,350);
+function byId(id){return document.getElementById(id)}
+function setText(id,v){const e=byId(id); if(e) e.textContent=v??''}
+async function copyToClipboard(text){try{await navigator.clipboard.writeText(String(text||''));return true}catch(e){const ta=document.createElement('textarea');ta.value=String(text||'');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');ta.remove();return ok}}
+function showToast(type,text){const c=byId('toasts');const el=document.createElement('div');el.className='toast '+(type==='comp'?'comp':type==='heat'?'heat':'');const label=type==='heat'?'🔥 Heat Alert':type==='comp'?'⚡ Concurrent':'ℹ Info';el.innerHTML=`<div class="toast-type">${safe(label)}</div><div class="toast-text">${safe(text)}</div>`;c.appendChild(el);setTimeout(()=>el.remove(),5000)}
+
+function currentLanguage(){return 'en'}
+function langMeta(code){return ['en','🇬🇧','English']}
+
+function detectLang(text){
+  const v=(text||'').toLowerCase();
+  if(/[اأإء-ي]/.test(v)) return 'ar';
+  if(/[ぁ-んァ-ン]/.test(v)) return 'ja';
+  if(/[가-힣]/.test(v)) return 'ko';
+  if(/\b(the|is|are|was|were|with|from|this|that|have|been|will|for|and|but)\b/.test(v)) return 'en';
+  if(/\b(und|die|der|das|ist|sind|werden|haben|nicht|für|mit|auf)\b/.test(v)) return 'de';
+  if(/\b(los|las|del|que|con|por|para|una|este|como|más|pero)\b/.test(v)) return 'es';
+  if(/\b(les|des|est|sont|avec|pour|dans|une|sur|par|qui|que|pas)\b/.test(v)) return 'fr';
+  if(/\b(il|la|di|che|con|per|una|sono|del|della|non|più)\b/.test(v)) return 'it';
+  if(/[àâéèêëîïôùûüç]/.test(v)) return 'fr';
+  return 'en';
+}
+
+function getLangFlag(langCode){
+  const langFlags = {
+    'ar':'🇸🇦','en':'🇬🇧','de':'🇩🇪','es':'🇪🇸','it':'🇮🇹','pt':'🇵🇹','nl':'🇳🇱','ja':'🇯🇵','ko':'🇰🇷','fr':'🇫🇷'
+  };
+  return langFlags[langCode] || '🌐';
+}
+
+async function translateText(text,srcLang,tgtLang){
+  text = String(text || '').trim();
+  if(!text || srcLang===tgtLang) return text;
+
+  const cacheKey = `tr:${srcLang}:${tgtLang}:${text}`;
+  try{
+    const cached = sessionStorage.getItem(cacheKey);
+    if(cached) return cached;
+  }catch(e){}
+
+  const enc = encodeURIComponent(text.slice(0,900));
+  const pair = `${srcLang}|${tgtLang}`;
+
+  const fetchers = [
+    ()=>fetch(`https://api.mymemory.translated.net/get?q=${enc}&langpair=${pair}`,{signal:AbortSignal.timeout(7000)}).then(r=>r.json()).then(d=>d?.responseData?.translatedText),
+    ()=>fetch(PROXY+encodeURIComponent(`https://api.mymemory.translated.net/get?q=${enc}&langpair=${pair}`),{signal:AbortSignal.timeout(8000)}).then(r=>r.json()).then(raw=>{const d=JSON.parse(raw.contents||'{}');return d?.responseData?.translatedText}),
+    ()=>fetch(`https://lingva.ml/api/v1/${srcLang}/${tgtLang}/${enc}`,{signal:AbortSignal.timeout(7000)}).then(r=>r.json()).then(d=>d?.translation),
+    ()=>fetch(`https://translate.plausibility.cloud/api/v1/${srcLang}/${tgtLang}/${enc}`,{signal:AbortSignal.timeout(7000)}).then(r=>r.json()).then(d=>d?.translation)
+  ];
+
+  let tr = await retryFetch(fetchers);
+  tr = String(tr || '').trim();
+
+  if(tr && tr !== text && !/MYMEMORY|QUERY LENGTH/i.test(tr)){
+    try{sessionStorage.setItem(cacheKey,tr)}catch(e){}
+    return tr;
+  }
+
+  return null;
+}
+
+function translatedField(a,field){const lang=currentLanguage();return a?.i18n?.[lang]?.[field]||a?.[field]||''}
+async function ensureArticleTranslation(a,targetLang=currentLanguage()){
+  if(!a) return a;
+  a.i18n=a.i18n||{};
+  if(a.i18n[targetLang]?.title&&a.i18n[targetLang]?.excerpt) return a;
+
+  const titleSrc = detectLang(a.title || '');
+  const excerptSrc = detectLang(a.excerpt || '');
+
+  const titlePromise = titleSrc === targetLang
+    ? Promise.resolve(a.title || '')
+    : translateText(a.title || '', titleSrc, targetLang);
+
+  const excerptPromise = excerptSrc === targetLang
+    ? Promise.resolve(a.excerpt || '')
+    : translateText(a.excerpt || '', excerptSrc, targetLang);
+
+  const [title,excerpt]=await Promise.all([titlePromise, excerptPromise]);
+
+  a.i18n[targetLang]={
+    title:title||a.title||'',
+    excerpt:excerpt||a.excerpt||''
+  };
+  return a;
+}
+
+function cleanUrl(raw,baseUrl=''){
+  let u=String(raw||'').trim();
+  if(!u||u==='#') return '';
+  u=u.replace(/^<!\[CDATA\[|\]\]>$/g,'').replace(/&amp;/g,'&').trim();
+  const found=u.match(/https?:\/\/[^\s"'<>]+/i); if(found) u=found[0];
+  try{const url=baseUrl?new URL(u,baseUrl):new URL(u); if(!/^https?:$/.test(url.protocol)) return ''; url.hash=''; return url.href}catch(e){return ''}
+}
+function articleSearchUrl(a){return 'https://www.google.com/search?q='+encodeURIComponent([`"${a?.title||''}"`,a?.source||''].filter(Boolean).join(' '))}
+function isBadArticleUrl(url){
+  if(!url) return true;
+  try{const u=new URL(url);const p=u.pathname.replace(/\/+$/,'').toLowerCase();if(!p) return true;if(['/feed','/rss','/xml','/category','/tag','/tags','/news','/latest','/magazine/features'].some(x=>p.endsWith(x)))return true;if(/\/(feed|rss|tag|tags|category|author)\//.test(p))return true;return false}catch(e){return true}
+}
+function isLikelyDemoArticle(a){return String(a?.id||'').startsWith('d')}
+function getArticleUrl(a){
+  const validated=cleanUrl(a?.validated_url||a?.article_url||'',a?.source_feed_url||'');
+  if(validated&&!isBadArticleUrl(validated))return validated;
+  const direct=cleanUrl(a?.url||a?.original_url||'',a?.source_feed_url||'');
+  if(direct&&!isBadArticleUrl(direct)&&!isLikelyDemoArticle(a))return direct;
+  const cache = loadUrlCache();
+  if(a?.id && cache[a.id]?.url && !isBadArticleUrl(cache[a.id].url)) return cache[a.id].url;
+  return articleSearchUrl(a);
+}
+function articleLinkStatus(a){const url=getArticleUrl(a);return url.includes('google.com/search')?(isLikelyDemoArticle(a)?'Démo — recherche exacte':'Recherche exacte'):'URL article RSS'}
+
+function scoreHeat(title,desc,cat){const tx=((title||'')+' '+(desc||'')).toLowerCase();let s=40;if(cat==='nightlife')s+=25;if(cat==='luxury')s+=10;NIGHTLIFE_KW.forEach(k=>{if(tx.includes(k))s+=3});if(tx.includes('vip')||tx.includes('table'))s+=8;if(tx.includes('close')||tx.includes('scandal')||tx.includes('ban')||tx.includes('fine'))s+=15;if(tx.includes('innovat')||tx.includes('launch')||tx.includes('new ')||tx.includes('first'))s+=6;if(tx.includes('exclusive')||tx.includes('luxury')||tx.includes('premium'))s+=5;return Math.min(99,Math.max(10,s))}
+function detectCity(t){const tx=String(t||'').toLowerCase();return CITIES.find(c=>tx.includes(c))||null}
+function detectComp(t){const tx=String(t||'').toLowerCase();return COMPETITORS.filter(c=>tx.includes(c))}
+function getRssDescription(item){return item.querySelector('description')?.textContent||item.querySelector('summary')?.textContent||item.getElementsByTagName('content:encoded')[0]?.textContent||item.querySelector('content')?.textContent||''}
+function getRssDate(item){const raw=item.querySelector('pubDate')?.textContent||item.querySelector('published')?.textContent||item.querySelector('updated')?.textContent||new Date().toISOString();const d=new Date(raw);return Number.isNaN(d.getTime())?new Date().toISOString():d.toISOString()}
+function getLinkFromRssItem(item, feedUrl){
+  const candidates = [];
+  Array.from(item.querySelectorAll('link[href]')).forEach(link=>{
+    const rel = (link.getAttribute('rel') || 'alternate').toLowerCase();
+    const href = link.getAttribute('href');
+    if(href && (!rel || rel === 'alternate')) candidates.push(href);
+  });
+  Array.from(item.querySelectorAll('link')).forEach(link=>{
+    const txt = (link.textContent || '').trim();
+    if(txt) candidates.push(txt);
+  });
+  ['guid','id','comments'].forEach(tag=>{
+    const txt = item.querySelector(tag)?.textContent?.trim();
+    if(txt) candidates.push(txt);
+  });
+  const desc = getRssDescription(item);
+  const found = String(desc||'').match(/https?:\/\/[^\s"'<>]+/i);
+  if(found) candidates.push(found[0]);
+  for(const raw of candidates){
+    const u = cleanUrl(raw, feedUrl);
+    if(u && !isBadArticleUrl(u)) return u;
+  }
+  return '';
+}
+
+function parseRSS(xml,feed){
+  try{
+    const doc=new DOMParser().parseFromString(xml,'text/xml');
+    if(doc.querySelector('parsererror')) return [];
+
+    const items=Array.from(doc.querySelectorAll('item, entry')).slice(0,18);
+    const out = items.map((item,idx)=>{
+      const title=stripHtml(item.querySelector('title')?.textContent||'—');
+      const finalUrl=getLinkFromRssItem(item, feed.url);
+      const desc=getRssDescription(item);
+      const rawTags=Array.from(item.querySelectorAll('category')).map(c=>stripHtml(c.textContent)).filter(Boolean);
+      const tags=[...new Set(rawTags)].slice(0,4);
+      const hash=Math.abs((title+(finalUrl||feed.url)).split('').reduce((a,c)=>((a<<5)-a+c.charCodeAt(0))|0,0));
+      return {
+        id:`${feed.name}-${hash}`,
+        source:feed.name,
+        source_feed_url:feed.url,
+        category:feed.cat,
+        title,
+        original_url:finalUrl,
+        validated_url:finalUrl,
+        article_url:finalUrl,
+        url:finalUrl,
+        excerpt:stripHtml(desc).slice(0,300),
+        tags,
+        heat_score:scoreHeat(title,desc,feed.cat),
+        urgency:'WEEK',
+        city:detectCity(title+' '+desc),
+        competitor_hit:detectComp(title+' '+desc),
+        ingested_at:getRssDate(item),
+        wiki_notes:null,
+        wiki_history:[]
+      };
+    }).filter(a=>a.title && a.title !== '—' && a.article_url && !isBadArticleUrl(a.article_url));
+
+    rememberArticleUrls(out);
+    return out;
+  }catch(e){return []}
+}
+
+async function fetchFeed(feed){
+  const xml = await fetchTextWithFallbacks(feed.url);
+  if(!xml) return [];
+  return parseRSS(xml, feed);
+}
+
+function timeAgo(iso){if(!iso)return'—';const s=Math.max(0,Math.floor((Date.now()-new Date(iso))/1000));if(s<60)return s+'s';if(s<3600)return Math.floor(s/60)+'min';if(s<86400)return Math.floor(s/3600)+'h';return Math.floor(s/86400)+'j'}
+function updateClock(){setText('clock',new Date().toLocaleTimeString('fr-FR',{hour12:false,timeZone:'Europe/Paris'})+' Europe/Paris')}
+
+function buildUI(){
+  byId('tabs').innerHTML=CATS.map(([cat,label],i)=>`<div class="ntab ${i===0?'on':''}" data-cat="${safeAttr(cat)}">${safe(label)}</div>`).join('');
+  byId('filters').innerHTML=FILTERS.map(([kw,label],i)=>`<div class="chip ${i===0?'on':''} ${kw==='__COMP__'?'comp':''}" data-filter="${safeAttr(kw)}">${safe(label)}</div>`).join('');
+  byId('lang-menu').innerHTML=LANGS.map(([code,flag,name])=>`<div class="lang-option" data-lang="${code}" data-flag="${flag}" data-name="${safeAttr(name)}">${flag} ${safe(name)}</div>`).join('');
+  byId('export-format').innerHTML=['pdf','txt','csv','md','json'].map((f,i)=>`<div class="fmt-btn ${i===0?'on':''}" data-fmt="${f}">${f==='md'?'Markdown':f.toUpperCase()}</div>`).join('');
+  byId('trend-list').innerHTML=[['Immersive Venues',94],['AI × Nightlife',87],['Sober Economy',82],['Biometric VIP',76],['Hotel × Club',71],['Dynamic Pricing',68]].map(([n,v],i)=>`<div class="trend-item"><div class="trend-row"><span class="trend-name">${safe(n)}</span><span class="trend-pct">${v}</span></div><div class="trend-track"><div class="trend-fill ${i%2?'blue':''}" style="width:${v}%"></div></div></div>`).join('');
+  byId('src-list').innerHTML=FEEDS.slice(0,10).map(f=>`<div class="src-item"><div class="src-dot" style="background:${CAT_COLORS[f.cat]||'#888'}"></div>${safe(f.name)}<span class="src-ok">✓</span></div>`).join('');
+  byId('city-grid').innerHTML=[['Ibiza',99,'Peak Season'],['Berlin',97,'Berghain Open'],['Dubai',92,'HNWI Season'],['Miami',88,'Ultra Mode'],['Tokyo',84,'Womb Live'],['Seoul',81,'Festival Rise'],['London',79,'Fabric Wknd'],['Paris',75,'Rex Club']].map(c=>`<div class="city-cell"><div class="city-name">${safe(c[0])}</div><div class="city-temp ${c[1]>90?'hot gold':''}">${c[1]}°</div><div class="city-status">${safe(c[2])}</div></div>`).join('');
+  byId('sig-list').innerHTML=[['red','Disruption','Face-pay Fabric London — queues −73%.','London · 2h ago'],['','VIP Signal','Dubai table min. CHF 8 000 en Q1 2026.','Dubai · 5h ago'],['blue','Tech Move','AI DJs biométrie crowd BPM temps réel.','Berlin · 8h ago'],['','Trend Shift','Sober NYC $400M — adaptogens dominent.','NYC · 12h ago']].map(s=>`<div class="sig ${s[0]}"><div class="sig-type">${safe(s[1])}</div><div class="sig-text">${safe(s[2])}</div><div class="sig-from">${safe(s[3])}</div></div>`).join('');
+  const ticks=['IBIZA CASHLESS VIP','BERLIN BIOMETRIC CROWD','SOBER NIGHTLIFE PREMIUM','DUBAI TABLE VIP CHF 8 000','FABRIC LONDON FACE-PAY','AI DJS BPM TEMPS RÉEL','SPATIAL AUDIO VENUES','DYNAMIC PRICING +41%','SEOUL FESTIVAL RECORD','HOTEL-CLUB HYBRID'];
+  byId('ticker-scroll').innerHTML=[...ticks,...ticks].map(x=>`<span class="ticker-item">${safe(x)}</span>`).join('');
+}
+
+async function loadFeed(){
+  const feedEl = byId('feed');
+  if(!AppState.articles.length){
+    feedEl.innerHTML = '<div class="loading"><div class="spinner"></div><div class="load-text">Loading sources...</div></div>';
+  }
+
+  const timeoutPromise = new Promise((_,r) => setTimeout(() => r(new Error('Timeout global')), 25000));
+  const maxAge = 7 * 24 * 3600 * 1000;
+  const now = Date.now();
+
+  const filterByDate = (articles) => {
+    return articles.filter(a => {
+      const age = now - new Date(a.ingested_at).getTime();
+      return age <= maxAge;
+    });
+  };
+
+  try{
+    const raceResult = await Promise.race([
+      (async()=>{
+        try{
+          const r=await fetch(`${API}/api/signals?limit=120&sort=heat`,{signal:AbortSignal.timeout(3500)});
+          const data=await r.json();
+          if(Array.isArray(data)&&data.length){
+            return {type:'backend', articles:filterByDate(data.filter(a=>getArticleUrl(a) && !getArticleUrl(a).includes('google.com/search')))};
+          }
+        }catch(e){
+          console.log('Backend indisponible, essai RSS...');
+        }
+        return null;
+      })(),
+      timeoutPromise
+    ]);
+
+    if(raceResult?.type==='backend' && raceResult.articles.length){
+      AppState.setArticles(raceResult.articles);
+      render(); updateStats(); loadBrief();
+      showToast('info',`${AppState.articles.length} signaux < 7j chargés`);
+      return;
+    }
+  }catch(e){
+    console.log('Timeout ou erreur backend');
+  }
+
+  try{
+    const results=await Promise.race([
+      Promise.allSettled(FEEDS.map(fetchFeed)),
+      timeoutPromise
+    ]);
+    const live=(results||[]).flatMap(r=>r.status==='fulfilled'?r.value:[])
+      .filter(a=>a.article_url && !isBadArticleUrl(a.article_url));
+
+    if(live.length){
+      const uniq = new Map();
+      live.forEach(a=>{
+        const key = cleanUrl(a.article_url || a.url).replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,'');
+        if(!uniq.has(key)) uniq.set(key,a);
+      });
+      const filtered = filterByDate([...uniq.values()]);
+      AppState.setArticles(filtered.sort((a,b)=>(b.heat_score||0)-(a.heat_score||0)));
+      render(); updateStats(); loadBrief();
+      showToast('info',`${AppState.articles.length} posts < 7j chargés`);
+      return;
+    }
+  }catch(e){
+    console.log('Timeout ou erreur RSS');
+  }
+
+  console.log('Affichage articles démo');
+  AppState.setArticles([...DEMO_ARTICLES]);
+  AppState.selectedIds.clear();
+  updateSelBar();
+  render(); updateStats(); loadBrief();
+  showToast('info','Mode démo : 5 articles exemple');
+}
+
+async function render(){
+  const q=byId('q').value.trim().toLowerCase(), sort=byId('sort-sel').value;
+
+  const now = Date.now();
+  const dateRangeMs = AppState.dateRange==='24h' ? 24*3600*1000 : AppState.dateRange==='3d' ? 3*24*3600*1000 : 7*24*3600*1000;
+
+  let items=[...AppState.articles].filter(d=>{
+    const articleAge = now - new Date(d.ingested_at).getTime();
+    return articleAge <= dateRangeMs;
+  });
+
+  if(AppState.currentCategory) items=items.filter(d=>d.category===AppState.currentCategory);
+  if(AppState.compFilterEnabled) items=items.filter(d=>d.competitor_hit&&d.competitor_hit.length);
+  if(q) items=items.filter(d=>(d.title||'').toLowerCase().includes(q)||(d.excerpt||'').toLowerCase().includes(q)||(d.source||'').toLowerCase().includes(q)||(d.city||'').toLowerCase().includes(q)||(d.tags||[]).some(x=>String(x).toLowerCase().includes(q)));
+  if(sort==='date') items.sort((a,b)=>new Date(b.ingested_at)-new Date(a.ingested_at)); else items.sort((a,b)=>(b.heat_score||0)-(a.heat_score||0));
+  AppState.currentItems=items.slice(0,60);
+  setText('sc-total',AppState.currentItems.length);setText('sc-now',AppState.currentItems.filter(d=>(d.heat_score||0)>=90).length);setText('sc-comp',AppState.currentItems.filter(d=>d.competitor_hit&&d.competitor_hit.length).length);setText('sc-time',new Date().toLocaleTimeString('fr-FR',{hour12:false}));
+  const feed=byId('feed');
+  if(!AppState.currentItems.length){feed.innerHTML=`<div class="empty-state">${safe(t('empty'))}</div>`;return}
+  feed.innerHTML=AppState.currentItems.map((d,i)=>{
+    const color=CAT_COLORS[d.category]||'#888', heatClass=(d.heat_score>=90)?'max':(d.heat_score>=70)?'high':'', sel=AppState.selectedIds.has(d.id);
+    const lang=detectLang(`${d.title||''} ${d.excerpt||''}`), [curLang,curFlag]=langMeta(currentLanguage());
+    const langFlag=getLangFlag(lang);
+    const url=getArticleUrl(d), urlEnc=encodeURIComponent(url), title=translatedField(d,'title'), exc=translatedField(d,'excerpt');
+    return `<article class="article ${sel?'selected':''}" id="art-${i}" data-article-index="${i}" style="animation-delay:${i*.02}s;border-left-color:${color}">
+      <div class="art-check ${sel?'checked':''}" data-action="toggle-select" data-index="${i}" data-id="${safeAttr(d.id)}"></div>
+      <div class="art-body">
+        <div class="art-meta">
+          <span class="art-source" style="color:${color}">${safe(d.source)}</span>
+          <span class="art-cat">${safe(d.category)}</span>
+          ${isLikelyDemoArticle(d)?'<span class="badge badge-demo">DEMO</span>':''}
+          ${lang!==curLang?`<span class="badge badge-today" data-action="quick-translate" data-index="${i}">${curFlag} Translate post</span>`:''}
+          ${d.heat_score>=90?'<span class="badge badge-now">NOW</span>':d.heat_score>=70?'<span class="badge badge-today">TODAY</span>':''}
+          ${d.wiki_notes?'<span class="badge badge-wiki">Wiki</span>':''}
+          ${d.competitor_hit&&d.competitor_hit.length?'<span class="badge badge-comp">⚡</span>':''}
+        </div>
+        <div class="art-title" id="art-title-${i}" data-action="open-detail" data-index="${i}">${langFlag} ${safe(title)}</div>
+        <div class="art-excerpt" id="art-excerpt-${i}" data-action="open-detail" data-index="${i}">${safe(exc)}</div>
+        <div class="art-foot">
+          <span class="art-time">${safe(timeAgo(d.ingested_at))}</span>
+          ${d.city?`<span class="art-tag">${safe(d.city)}</span>`:''}
+          <span class="art-heat ${heatClass}">${safe(d.heat_score||'—')}</span>
+          <div class="art-share-row">
+            <button class="art-share-btn" data-action="open-url" data-index="${i}" title="${safeAttr(articleLinkStatus(d))}">↗</button>
+            <a class="art-share-btn" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(d.title||'')}&url=${urlEnc}" target="_blank" rel="noopener noreferrer">𝕏</a>
+            <a class="art-share-btn" href="https://wa.me/?text=${encodeURIComponent((d.title||'')+' '+url)}" target="_blank" rel="noopener noreferrer">W</a>
+            <a class="art-share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=${urlEnc}" target="_blank" rel="noopener noreferrer">in</a>
+            <button class="art-share-btn" data-action="copy-link" data-index="${i}">🔗</button>
+            <button class="art-share-btn det" data-action="open-detail" data-index="${i}">+</button>
+          </div>
+        </div>
+      </div>
+    </article>`
+  }).join('');
+
+  translationManager.unobserveAll();
+  document.querySelectorAll('[data-article-index]').forEach(el=>{
+    translationManager.observe(el);
+  });
+}
+
+function updateStats(){
+  const total=AppState.articles.length, now=AppState.articles.filter(a=>(a.heat_score||0)>=90).length, comp=AppState.articles.filter(a=>a.competitor_hit&&a.competitor_hit.length).length, day=AppState.articles.filter(a=>Date.now()-new Date(a.ingested_at)<86400000).length;
+  setText('s-total',total);setText('s-24h',day);setText('s-now',now);setText('s-comp',comp)
+}
+function updateSelBar(){const bar=byId('sel-bar'), count=byId('sel-count');if(AppState.selectedIds.size){bar.classList.add('on');count.textContent=`${AppState.selectedIds.size} article${AppState.selectedIds.size>1?'s':''} selected${AppState.selectedIds.size>1?'s':''}`}else bar.classList.remove('on')}
+function toggleSelect(i,id){AppState.toggleSelect(id);const art=byId('art-'+i),chk=art?.querySelector('.art-check');if(art&&chk){art.classList.toggle('selected',AppState.selectedIds.has(id));chk.classList.toggle('checked',AppState.selectedIds.has(id))}}
+function clearSelection(){AppState.clearSelection()}
+function getSelectedArticles(){return AppState.getSelectedArticles()}
+function openArticleUrl(i){const a=AppState.currentItems[i]||AppState.currentArticle;if(a)window.open(getArticleUrl(a),'_blank','noopener,noreferrer')}
+
+async function quickTranslate(i){
+  const a=AppState.currentItems[i]; if(!a) return;
+  await ensureArticleTranslation(a,currentLanguage());
+  const title=byId('art-title-'+i), exc=byId('art-excerpt-'+i);
+  if(title) title.textContent=translatedField(a,'title');
+  if(exc) exc.textContent=translatedField(a,'excerpt');
+}
+function buildMailto(a,url){return `mailto:?subject=${encodeURIComponent(a.title||'Nocturne Signal')}&body=${encodeURIComponent(`Nocturne Signal : ${a.title||''}\n\n${a.excerpt||''}\n\nLire : ${url}`)}`}
+
+async function openDetail(i){
+  const d=AppState.currentItems[i]; if(!d)return; AppState.currentArticle=d;
+  if(detectLang(d.title||'')!==currentLanguage() || detectLang(d.excerpt||'')!==currentLanguage()) await ensureArticleTranslation(d,currentLanguage());
+  setText('d-source',`${d.source} · ${(d.category||'').toUpperCase()}`);setText('d-heat','HEAT '+(d.heat_score||'—'));setText('d-title',translatedField(d,'title'));setText('d-excerpt',translatedField(d,'excerpt')||'');
+  const ub=byId('d-urgency-badge'); if(d.heat_score>=90){ub.textContent='NOW';ub.className='det-urgency badge badge-now'}else if(d.heat_score>=70){ub.textContent='TODAY';ub.className='det-urgency badge badge-today'}else{ub.textContent='';ub.className='det-urgency'}
+  byId('d-meta').innerHTML=`<span>${safe(timeAgo(d.ingested_at))} ago</span>${d.city?`<span class="det-city">${safe(d.city)}</span>`:''}`;
+  const comp=byId('d-comp'); if(d.competitor_hit&&d.competitor_hit.length){comp.textContent='⚡ Competitor detected : '+d.competitor_hit.join(', ');comp.classList.add('on')}else comp.classList.remove('on');
+  const url=getArticleUrl(d), titleEnc=encodeURIComponent(d.title||''), urlEnc=encodeURIComponent(url);
+  const lk=byId('d-link'); lk.href=url; lk.textContent=articleLinkStatus(d)+' ↗';
+  byId('share-tw').href=`https://twitter.com/intent/tweet?text=${titleEnc}&url=${urlEnc}`;
+  byId('share-li').href=`https://www.linkedin.com/sharing/share-offsite/?url=${urlEnc}`;
+  byId('share-wa').href=`https://wa.me/?text=${encodeURIComponent((d.title||'')+' '+url)}`;
+  byId('share-mail').href=buildMailto(d,url);
+  renderWiki(d.wiki_history||[]); byId('wi').value=''; setText('wiki-msg',''); byId('share-result').classList.remove('on'); closeTranslate();
+  byId('detail').classList.add('on'); byId('detail').scrollTop=0;
+}
+function closeDetail(){byId('detail').classList.remove('on');AppState.currentArticle=null;SSEManager.stop()}
+async function translateArticle(){
+  if(!AppState.currentArticle)return;
+  const box=byId('translate-box');
+  if(box.style.display==='block'){closeTranslate();return}
+  const tgt=currentLanguage();
+  const titleSrc=detectLang(AppState.currentArticle.title||'');
+  const excerptSrc=detectLang(AppState.currentArticle.excerpt||'');
+  const [,tgtFlag]=langMeta(tgt);
+  box.style.display='block';
+  setText('tr-hdr',`🌐 → ${tgtFlag||'🌐'} TRANSLATION`);
+  setText('translate-title','Translating...');
+  setText('translate-text','');
+  const [tt,te]=await Promise.all([
+    titleSrc===tgt ? Promise.resolve(AppState.currentArticle.title||'') : translateText(AppState.currentArticle.title||'',titleSrc,tgt),
+    excerptSrc===tgt ? Promise.resolve(AppState.currentArticle.excerpt||'') : translateText(AppState.currentArticle.excerpt||'',excerptSrc,tgt)
+  ]);
+  if(tt || te){
+    setText('translate-title',tt||AppState.currentArticle.title||'');
+    setText('translate-text',te||AppState.currentArticle.excerpt||'');
+  }else{
+    const enc = encodeURIComponent(`${AppState.currentArticle.title||''}.${AppState.currentArticle.excerpt||''}`.slice(0,1200));
+    byId('translate-title').textContent = AppState.currentArticle.title || '';
+    byId('translate-text').innerHTML = `Automatic translation unavailable via les API publiques.<br><br><a href="https://translate.google.com/?sl=auto&tl=${safeAttr(tgt)}&text=${enc}" target="_blank" rel="noopener noreferrer" style="color:var(--blue);border:1px solid var(--blue);padding:7px 12px;text-decoration:none;display:inline-block">Open Google Translate ↗</a>`;
+  }
+}
+function closeTranslate(){byId('translate-box').style.display='none'}
+function renderWiki(entries){const el=byId('wiki-entries');if(!entries.length){el.innerHTML='<p style="font-size:11px;color:var(--muted);margin-bottom:12px">Aucune note pour ce signal.</p>';return}el.innerHTML=entries.map(e=>`<div class="we"><div class="we-meta"><span>v${safe(e.version)}</span><span>${safe(e.author)}</span><span class="role">${safe(e.role||'')}</span><span>${safe(new Date(e.created_at).toLocaleString('fr-FR'))}</span></div><div class="we-text">${safe(e.note)}</div></div>`).join('')}
+async function saveWiki(){const note=byId('wi').value.trim(),author=byId('wauth').value.trim()||'Owner',role=byId('wrole').value,msg=byId('wiki-msg');if(!note||!AppState.currentArticle)return;try{const r=await fetch(`${API}/api/wiki/${encodeURIComponent(AppState.currentArticle.id)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({note,author,role}),signal:AbortSignal.timeout(3000)});const d=await r.json();msg.textContent='✓ v'+d.version;msg.style.color='var(--green)'}catch(e){AppState.currentArticle.wiki_history=AppState.currentArticle.wiki_history||[];const v=AppState.currentArticle.wiki_history.length+1;AppState.currentArticle.wiki_history.unshift({note,author,role,version:v,created_at:new Date().toISOString()});AppState.currentArticle.wiki_notes=note;msg.textContent='✓ v'+v+' (local)';msg.style.color='var(--green)'}byId('wi').value='';renderWiki(AppState.currentArticle.wiki_history||[]);render()}
+
+function exportSelected(){const items=getSelectedArticles();if(!items.length)return;setText('export-sub',`${items.length} article${items.length>1?'s':''} selected${items.length>1?'s':''}`);byId('export-list').innerHTML=items.map(a=>`<div class="export-item"><div class="src-dot" style="background:${CAT_COLORS[a.category]||'#888'};width:8px;height:8px"></div><div><strong>${safe(a.title)}</strong><br><span style="font-size:9px;color:var(--muted)">${safe(a.source)} · ${safe(a.category)}</span></div></div>`).join('');byId('export-modal').classList.add('on')}
+function closeExport(){byId('export-modal').classList.remove('on')}
+function formatArticle(a,i){const meta=[a.source,(a.category||'').toUpperCase(),a.city||null,'Heat '+a.heat_score].filter(Boolean).join(' · ');return `${i+1}. ${a.title} [${meta}]\n${a.excerpt||'—'}\n${getArticleUrl(a)||'(pas de lien)'}`}
+function downloadBlob(name,type,content){const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const el=document.createElement('a');el.href=url;el.download=name;el.click();setTimeout(()=>URL.revokeObjectURL(url),300)}
+function doExport(){
+  const items=getSelectedArticles();if(!items.length)return;const date=new Date().toLocaleString('fr-FR'), filename='nocturne-intel-'+new Date().toISOString().slice(0,10);
+  if(AppState.exportFormat==='pdf'){let html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Nocturne Intel</title><style>body{font-family:Georgia,serif;max-width:720px;margin:40px auto;color:#1a1814;font-size:14px;line-height:1.6}h1{font-size:18px;letter-spacing:5px;text-transform:uppercase;border-bottom:2px solid #1a1814;padding-bottom:10px}.gen,.meta,.lien{font-family:monospace;color:#777;font-size:11px}.art{margin:36px 0;padding-bottom:28px;border-bottom:1px solid #ddd;page-break-inside:avoid}h2{font-size:20px;font-weight:400;line-height:1.3}</style></head><body><h1>Nocturne Intel</h1><div class="gen">Export · ${safe(date)} · ${items.length} signaux</div>`;items.forEach((a,i)=>{const meta=[a.source,(a.category||'').toUpperCase(),a.city||null,'Heat '+a.heat_score].filter(Boolean).join(' · ');const url=getArticleUrl(a);html+=`<div class="art"><div class="meta">${i+1}. [${safe(meta)}]</div><h2>${safe(a.title)}</h2><p>${safe(a.excerpt||'—')}</p><div class="lien"><a href="${safeAttr(url)}">${safe(url)}</a></div></div>`});html+='</body></html>';const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>w.print(),450);closeExport();return}
+  if(AppState.exportFormat==='txt'){downloadBlob(filename+'.txt','text/plain;charset=utf-8',['NOCTURNE INTEL — Export',date,'='.repeat(60),'',...items.flatMap((a,i)=>[formatArticle(a,i),'','—'.repeat(60),''])].join('\n'))}
+  if(AppState.exportFormat==='md'){downloadBlob(filename+'.md','text/markdown;charset=utf-8',`# Nocturne Intel — Export\n*${date} · ${items.length} signaux*\n\n`+items.map((a,i)=>`## ${i+1}. ${a.title}\n\n${a.excerpt||'—'}\n\n${getArticleUrl(a)}\n`).join('\n---\n'))}
+  if(AppState.exportFormat==='csv'){const esc=s=>'"'+String(s??'').replace(/"/g,'""')+'"';downloadBlob(filename+'.csv','text/csv;charset=utf-8','﻿'+'"N°","Titre","Source","Catégorie","Ville","Heat","Résumé","Lien","Date"\n'+items.map((a,i)=>[i+1,esc(a.title),esc(a.source),esc(a.category),esc(a.city||''),a.heat_score,esc(a.excerpt),esc(getArticleUrl(a)),esc(a.ingested_at)].join(',')).join('\n'))}
+  if(AppState.exportFormat==='json'){downloadBlob(filename+'.json','application/json;charset=utf-8',JSON.stringify(items.map((a,i)=>({numero:i+1,titre:a.title,source:a.source,categorie:a.category,ville:a.city||null,heat:a.heat_score,resume:a.excerpt||'',lien:getArticleUrl(a),date:a.ingested_at})),null,2))}
+  closeExport()
+}
+function shareSelected(){const items=getSelectedArticles();if(!items.length)return;const text='Nocturne Intel — Sélection :\n'+items.map(a=>`• ${a.title} (${a.source})\n  ${getArticleUrl(a)}`).join('\n\n');window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank','noopener,noreferrer')}
+function shareSelectionLink(){const items=getSelectedArticles();const text='Nocturne Intel — '+items.length+' signaux selecteds :\n'+items.map(a=>`• ${a.title} (${a.source}) ${getArticleUrl(a)}`).join('\n');copyToClipboard(text).then(()=>showToast('info','Selection copied'))}
+
+async function makeShare(){const days=parseInt(byId('s-days').value)||7,label=byId('s-label').value.trim();const base=AppState.currentArticle?getArticleUrl(AppState.currentArticle):location.href;setText('share-url',`${base}${base.includes('?')?'&':'?'}ni_expire=${days}&label=${encodeURIComponent(label)}`);byId('share-result').classList.add('on')}
+function copyShare(){copyToClipboard(byId('share-url').textContent).then(()=>{const el=document.querySelector('#share-result .copy-btn');if(el){el.textContent='✓ copié';setTimeout(()=>el.textContent='copier',2000)}})}
+function copyArticleLink(){const url=AppState.currentArticle?getArticleUrl(AppState.currentArticle):location.href;copyToClipboard(url).then(()=>showToast('info','Lien copié'))}
+function copyLink(i){const a=AppState.currentItems[i];if(a)copyToClipboard(getArticleUrl(a)).then(()=>showToast('info','Lien copié'))}
+function exportPDF(days){exportSelected(); if(!AppState.selectedIds.size && AppState.currentItems.length){AppState.selectedIds.add(AppState.currentItems[0].id);exportSelected()} showToast('info',`Utilise Export sélection > PDF pour ${days}j`)}
+
+async function scrape(){const btn=byId('scr-btn'),msg=byId('scr-msg');btn.disabled=true;btn.textContent='↻ In progress...';msg.style.display='block';msg.style.color='var(--muted)';msg.textContent='Loading...';try{await fetch(`${API}/api/scrape`,{method:'POST',signal:AbortSignal.timeout(3000)});msg.textContent='✓ Backend scrape launched';msg.style.color='var(--green)';setTimeout(loadFeed,2500)}catch(e){await loadFeed();msg.textContent='✓ Direct RSS scraping completed';msg.style.color='var(--green)'}btn.disabled=false;btn.textContent='↻ Scraping = Scan sources'}
+function loadBrief(){const el=byId('brief-box');if(AppState.articles.length){const top=[...AppState.articles].sort((a,b)=>(b.heat_score||0)-(a.heat_score||0)).slice(0,5);el.textContent=top.map((a,i)=>`${i+1}. [${a.heat_score}] ${a.source} — ${a.title.slice(0,80)}`).join('\n\n')}else el.textContent='Start feed pour see brief.'}
+
+function setTab(cat,el){document.querySelectorAll('.ntab').forEach(x=>x.classList.remove('on'));el.classList.add('on');AppState.setCategory(cat)}
+function setFilter(kw,el){document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));el.classList.add('on');if(kw==='__COMP__'){AppState.compFilterEnabled=true;byId('q').value=''}else{AppState.compFilterEnabled=false;byId('q').value=kw}render()}
+
+document.addEventListener('click',e=>{
+  const tab=e.target.closest('.ntab'); if(tab){setTab(tab.dataset.cat,tab);return}
+  const chip=e.target.closest('.chip'); if(chip){setFilter(chip.dataset.filter,chip);return}
+  const fmt=e.target.closest('.fmt-btn'); if(fmt){document.querySelectorAll('.fmt-btn').forEach(b=>b.classList.remove('on'));fmt.classList.add('on');AppState.exportFormat=fmt.dataset.fmt;return}
+  const act=e.target.closest('[data-action]'); if(!act)return;
+  const a=act.dataset.action, i=Number(act.dataset.index);
+  if(a==='render') render();
+  if(a==='scrape') scrape();
+  if(a==='brief') loadBrief();
+  if(a==='toggle-select') toggleSelect(i,act.dataset.id);
+  if(a==='clear-selection') clearSelection();
+  if(a==='export-selected') exportSelected();
+  if(a==='share-selected') shareSelected();
+  if(a==='open-url') openArticleUrl(i);
+  if(a==='copy-link') copyLink(i);
+  if(a==='open-detail') openDetail(i);
+  if(a==='close-detail') closeDetail();
+  if(a==='translate-detail') translateArticle();
+  if(a==='close-translate') closeTranslate();
+  if(a==='copy-article-link') copyArticleLink();
+  if(a==='save-wiki') saveWiki();
+  if(a==='make-share') makeShare();
+  if(a==='copy-share') copyShare();
+  if(a==='export-pdf-7') exportPDF(7);
+  if(a==='export-pdf-30') exportPDF(30);
+  if(a==='close-export') closeExport();
+  if(a==='do-export') doExport();
+  if(a==='share-selection-link') shareSelectionLink();
+});
+byId('export-modal').addEventListener('click',e=>{if(e.target===byId('export-modal'))closeExport()});
+byId('q').addEventListener('input',renderDebounced);
+byId('sort-sel').addEventListener('change',render);
+byId('date-range-sel').addEventListener('change',e=>{
+  AppState.dateRange = e.target.value;
+  render();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeExport();closeTranslate();if(byId('detail').classList.contains('on'))closeDetail()}});
+
+window.addEventListener('beforeunload',()=>{
+  SSEManager.stop();
+  translationManager.unobserveAll();
+});
+
+buildUI();
+updateClock();setInterval(updateClock,1000);
+
+// Display demo démo immédiatement
+AppState.setArticles([...DEMO_ARTICLES]);
+render(); updateStats(); loadBrief();
+showToast('info','Demo articles loaded (scrape in background)');
+
+// Scrape en arrière-plan pour remplacer les démos
+loadFeed().catch(e => console.error('Error loadFeed:', e));
+SSEManager.start();
+setInterval(()=>{updateStats();loadBrief()},60000);
+setInterval(()=>{if(!byId('detail').classList.contains('on'))loadFeed()},180000);
+</script>
