@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>NOCTURNE INTEL — v4.1 Optimized</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f3ef;--surface:#fff;--border:#e2ddd6;--border2:#c8c2b8;--text:#1a1814;--muted:#6b6560;--dim:#9c9690;
+  --gold:#8b6914;--gold-bg:#fdf6e3;--gold-bdr:#d4a929;--red:#b83225;--red-bg:#fdf0ee;--blue:#1a4a7a;--blue-bg:#eef3fa;
+  --green:#1a6b3c;--green-bg:#eef7f2;--purple:#6b3fa0;--purple-bg:#f5eeff;
+  --c-nightlife:#8b6914;--c-music:#b83225;--c-culture:#6b3fa0;--c-tech:#1a4a7a;--c-luxury:#5d4e37;--c-biz:#1a6b3c
+}
+html{font-size:14px}
+body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospace;font-weight:300;min-height:100vh;overflow-x:hidden}
+button,input,select,textarea{font-family:inherit}
+button{cursor:pointer}
+header{height:60px;background:var(--surface);border-bottom:2px solid var(--text);padding:0 28px;display:flex;align-items:center;gap:18px;position:sticky;top:0;z-index:200}
+.logo{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:6px;display:flex;align-items:center;gap:9px;white-space:nowrap}
+.pip,.live-dot{border-radius:50%;animation:pulse 1.3s ease-in-out infinite}.pip{width:8px;height:8px;background:var(--gold)}.live-dot{width:6px;height:6px;background:var(--red)}
+@keyframes pulse{50%{opacity:.35}}
+.hsep{flex:1}.live-tag{display:flex;align-items:center;gap:6px;font-size:9px;letter-spacing:3px;color:var(--red);font-weight:500}
+#clock{font-size:10px;letter-spacing:1.5px;color:var(--muted);white-space:nowrap}.vip-badge{background:var(--text);color:var(--surface);font-size:9px;letter-spacing:3px;padding:5px 12px}
+.lang-selector{position:relative;flex-shrink:0}.lang-current{font-size:11px;color:var(--text);cursor:pointer;padding:5px 10px;border:1px solid var(--border);background:var(--surface);user-select:none;white-space:nowrap}
+.lang-menu{display:none;position:absolute;top:calc(100% + 4px);right:0;background:var(--surface);border:1px solid var(--border2);min-width:170px;z-index:1000;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+.lang-menu.on{display:block}.lang-option{padding:8px 14px;font-size:11px;cursor:pointer;white-space:nowrap}.lang-option:hover{background:var(--gold-bg);color:var(--gold)}
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;display:flex;overflow-x:auto;position:sticky;top:60px;z-index:199}
+nav::-webkit-scrollbar{display:none}.ntab{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:11px 16px;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:.15s;user-select:none}
+.ntab:hover{color:var(--text)}.ntab.on{color:var(--gold);border-bottom-color:var(--gold);font-weight:500}
+#sel-bar{display:none;background:var(--blue);color:#fff;padding:10px 28px;align-items:center;gap:16px;position:sticky;top:103px;z-index:198}
+#sel-bar.on{display:flex}.sel-count{font-size:11px;letter-spacing:1px;font-weight:500}.sel-actions{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+.sel-btn{font-size:9px;letter-spacing:2px;text-transform:uppercase;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.35);padding:5px 14px}.sel-btn:hover{background:rgba(255,255,255,.28)}.sel-btn.danger{background:rgba(184,50,37,.55)}
+.app{display:grid;grid-template-columns:260px 1fr 260px;min-height:calc(100vh - 103px)}
+.left-col,.right-col{background:var(--surface);overflow-y:auto;max-height:calc(100vh - 103px);position:sticky;top:103px}.left-col{border-right:1px solid var(--border);padding:20px;display:flex;flex-direction:column;gap:24px}.right-col{border-left:1px solid var(--border)}
+.sec-title,.rsec-title{font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);font-weight:500;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stat-box{background:var(--bg);border:1px solid var(--border);padding:11px}.stat-num{font-family:'Bebas Neue',cursive;font-size:28px;line-height:1}.gold{color:var(--gold)}.red{color:var(--red)}.blue{color:var(--blue)}.purple{color:var(--purple)}
+.stat-lbl,.sbc-lbl{font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.trend-list,.src-list,.sig-list{display:flex;flex-direction:column;gap:8px}.trend-row{display:flex;justify-content:space-between}.trend-name{font-size:11px}.trend-pct{font-family:'Bebas Neue',cursive;font-size:15px;color:var(--gold)}.trend-track{height:3px;background:var(--border);border-radius:2px;overflow:hidden}.trend-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 1.2s}.trend-fill.blue{background:var(--blue)}
+.src-item{display:flex;align-items:center;gap:7px;padding:5px 7px;font-size:10px;color:var(--muted);border:1px solid transparent}.src-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}.src-ok{margin-left:auto;color:var(--green)}
+.scr-btn,.go-btn{background:var(--text);color:var(--surface);font-size:9px;letter-spacing:2px;text-transform:uppercase;border:none;padding:9px 14px;transition:.15s}.scr-btn{width:100%}.scr-btn:hover,.go-btn:hover{background:var(--gold)}.go-btn.outline{background:none;border:1px solid var(--border2);color:var(--text)}.go-btn.outline:hover{background:var(--text);color:#fff}.go-btn.danger{background:var(--red)}
+#scr-msg{font-size:10px;color:var(--muted);margin-top:6px;display:none;text-align:center}
+.center-col{background:var(--bg);display:flex;flex-direction:column}.stat-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border)}.sbc{background:var(--surface);padding:12px 14px}.sbc-val{font-family:'Bebas Neue',cursive;font-size:28px;line-height:1}.sbc-sub{font-size:9px;color:var(--gold);margin-top:1px}
+.search-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:9px 18px;display:flex;gap:9px;align-items:center}.search-input{flex:1;background:var(--bg);border:1px solid var(--border);padding:8px 11px;font-size:12px;outline:none}.search-input:focus{border-color:var(--gold)}select.sort-sel{font-size:10px;border:1px solid var(--border);padding:8px;background:var(--surface);outline:none}
+.filters{background:var(--surface);border-bottom:1px solid var(--border);padding:7px 18px;display:flex;gap:5px;flex-wrap:wrap}.chip{font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:5px 10px;border:1px solid var(--border);color:var(--muted);cursor:pointer;user-select:none;background:var(--surface)}.chip:hover{border-color:var(--border2);color:var(--text)}.chip.on{border-color:var(--gold);color:var(--gold);background:var(--gold-bg);font-weight:500}.chip.comp.on{border-color:var(--purple);color:var(--purple);background:var(--purple-bg)}
+#feed{padding:0 18px 80px;overflow-y:auto;flex:1}.loading,.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:60px;color:var(--muted);font-size:12px;text-align:center}.spinner{width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.article{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--border2);margin-top:10px;padding:14px 16px 14px 14px;transition:.15s;animation:fadeup .25s ease backwards;display:grid;grid-template-columns:20px 1fr;gap:10px;align-items:start}@keyframes fadeup{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}.article:hover{box-shadow:0 2px 12px rgba(0,0,0,.07)}.article.selected{background:var(--gold-bg);outline:2px solid var(--gold-bdr)}
+.art-check{width:16px;height:16px;border:1.5px solid var(--border2);background:var(--surface);display:flex;align-items:center;justify-content:center;margin-top:2px}.art-check.checked{background:var(--gold);border-color:var(--gold)}.art-check.checked::after{content:'✓';color:#fff;font-size:10px;font-weight:500}
+.art-meta{display:flex;align-items:center;gap:7px;margin-bottom:5px;flex-wrap:wrap}.art-source{font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:500}.art-cat{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.badge{font-size:8px;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;font-weight:500}.badge-now{background:var(--red-bg);color:var(--red);border:1px solid var(--red)}.badge-today{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue)}.badge-wiki{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-bdr)}.badge-comp{background:var(--purple-bg);color:var(--purple);border:1px solid #c39bd3}.badge-demo{background:var(--bg);color:var(--muted);border:1px dashed var(--border2)}
+.art-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:400;line-height:1.35;margin-bottom:5px;cursor:pointer}.article:hover .art-title{color:var(--gold)}.art-excerpt{font-size:11px;color:var(--muted);line-height:1.7;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:7px;cursor:pointer}.art-foot{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.art-time{font-size:9px;color:var(--dim)}.art-tag{font-size:9px;padding:1px 6px;background:var(--bg);border:1px solid var(--border);color:var(--muted)}.art-heat{margin-left:auto;font-family:'Bebas Neue',cursive;font-size:20px;color:var(--border2)}.art-heat.high{color:var(--gold)}.art-heat.max{color:var(--red)}
+.art-share-row{display:flex;align-items:center;gap:4px;margin-left:auto}.art-share-btn{display:inline-flex;align-items:center;justify-content:center;width:26px;height:22px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:10px;transition:.12s;text-decoration:none}.art-share-btn:hover{background:var(--text);color:#fff;border-color:var(--text)}.art-share-btn.det{background:var(--gold-bg);color:var(--gold);border-color:var(--gold-bdr);font-weight:500}
+.rsec{padding:18px;border-bottom:1px solid var(--border)}.city-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}.city-cell{padding:8px 9px;border:1px solid var(--border);background:var(--bg);cursor:pointer}.city-cell:hover{border-color:var(--gold-bdr);background:var(--gold-bg)}.city-name{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}.city-temp{font-family:'Bebas Neue',cursive;font-size:20px;line-height:1.1}.city-status{font-size:8px;color:var(--dim);margin-top:1px}.sig{padding:9px 11px;background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--gold)}.sig.red{border-left-color:var(--red)}.sig.blue{border-left-color:var(--blue)}.sig-type{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:3px;font-weight:500}.sig-text{font-family:'Playfair Display',serif;font-size:12px;font-style:italic;line-height:1.4}.sig-from{font-size:8px;color:var(--dim);margin-top:3px}.brief-box{background:var(--gold-bg);border:1px solid var(--gold-bdr);padding:12px;font-size:11px;line-height:1.7;white-space:pre-line;max-height:200px;overflow-y:auto}.brief-btn{margin-top:8px;font-size:9px;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--gold-bdr);color:var(--gold);padding:5px 12px}
+#detail{display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto}#detail.on{display:block}.det-topbar{background:var(--surface);border-bottom:2px solid var(--text);padding:0 28px;height:60px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:10}.det-back-btn{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text);padding:8px 14px;border:1px solid var(--border2);background:var(--surface)}.det-back-btn:hover{background:var(--text);color:#fff}.det-topbar-source{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:500}.det-topbar-sep{flex:1}.det-heat{font-family:'Bebas Neue',cursive;font-size:28px;color:var(--gold)}
+.det-body{max-width:780px;margin:0 auto;padding:36px 40px 100px}.det-title{font-family:'Playfair Display',serif;font-size:34px;font-weight:400;line-height:1.25;margin-bottom:12px}.det-meta{font-size:10px;color:var(--muted);margin-bottom:8px;display:flex;gap:12px;flex-wrap:wrap}.det-city{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue);font-size:9px;padding:2px 8px}.det-excerpt{font-family:'Playfair Display',serif;font-size:19px;color:var(--muted);line-height:1.8;margin-bottom:24px}.det-comp{background:var(--purple-bg);border:1px solid #c39bd3;color:var(--purple);padding:9px 14px;font-size:11px;margin-bottom:18px;display:none}.det-comp.on{display:block}.det-action-row{display:flex;align-items:center;gap:10px;margin-bottom:26px;flex-wrap:wrap}.det-read-btn,.social-btn,.copy-link-btn{display:inline-flex;align-items:center;gap:6px;font-size:9px;letter-spacing:1px;padding:8px 12px;border:1px solid var(--border);color:var(--text);background:var(--surface);text-decoration:none}.det-read-btn{color:var(--gold);border-color:var(--gold-bdr);font-weight:500}.det-read-btn:hover{background:var(--gold);color:#fff}.social-btn:hover,.copy-link-btn:hover{background:var(--text);color:#fff}.share-sep{width:1px;height:28px;background:var(--border2)}.social-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}.det-divider{height:1px;background:var(--border);margin:28px 0}.wiki-heading,.share-heading{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--blue);border-bottom:2px solid var(--blue-bg);padding-bottom:7px;margin-bottom:12px;font-weight:500}.share-heading{color:var(--gold);border-bottom:1px solid var(--gold-bdr);margin-top:28px}
+#wiki-entries{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}.we{padding:11px 13px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--blue)}.we-meta{font-size:8px;color:var(--dim);margin-bottom:5px;display:flex;gap:10px}.we-meta .role{color:var(--blue);font-weight:500}.we-text{font-size:12px;line-height:1.6}.wiki-form{display:flex;flex-direction:column;gap:7px}.wiki-ta{background:var(--surface);border:1px solid var(--border);font-size:12px;padding:10px 12px;resize:vertical;min-height:70px;outline:none}.wiki-actions,.share-row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.wiki-input,.share-input{background:var(--surface);border:1px solid var(--border);font-size:11px;padding:6px 9px;outline:none}#wiki-msg{font-size:10px;color:var(--muted)}#share-result{display:none;margin-top:8px;padding:10px 14px;background:var(--gold-bg);border:1px solid var(--gold-bdr);font-size:11px;color:var(--gold);word-break:break-all}#share-result.on{display:block}.copy-btn{font-size:9px;color:var(--muted);cursor:pointer;margin-left:8px}
+#translate-box{display:none;background:var(--blue-bg);border:1px solid var(--blue);padding:16px 18px;margin-bottom:20px;max-width:680px}.tr-head{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--blue);font-weight:500;margin-bottom:10px;display:flex;justify-content:space-between}.tr-close{cursor:pointer;color:var(--muted);font-size:12px}.translate-title{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:10px;line-height:1.3}.translate-text{font-size:13px;color:var(--muted);line-height:1.75}
+#export-modal{display:none;position:fixed;inset:0;z-index:500;background:rgba(26,24,20,.5);align-items:center;justify-content:center}#export-modal.on{display:flex}.export-box{background:var(--surface);border:2px solid var(--text);padding:32px;max-width:520px;width:90%;max-height:80vh;overflow-y:auto;position:relative}.modal-close{position:absolute;top:16px;right:20px;font-size:18px;background:none;border:none;color:var(--muted)}.export-title{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:4px;margin-bottom:6px}.export-sub{font-size:10px;color:var(--muted);margin-bottom:20px}.export-list{display:flex;flex-direction:column;gap:6px;margin-bottom:20px;max-height:300px;overflow-y:auto}.export-item{padding:9px 12px;background:var(--bg);border:1px solid var(--border);font-size:11px;display:flex;gap:8px}.export-item strong{font-family:'Playfair Display',serif;font-size:13px;font-weight:400}.export-format,.export-actions{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}.fmt-btn{padding:8px 16px;border:1px solid var(--border2);font-size:10px;letter-spacing:2px;text-transform:uppercase;background:var(--surface);cursor:pointer}.fmt-btn:hover,.fmt-btn.on{background:var(--text);color:#fff}
+.ticker{background:var(--text);height:28px;display:flex;align-items:center;overflow:hidden;position:fixed;bottom:0;left:0;right:0;z-index:100}.ticker-lbl{background:var(--gold);color:#fff;height:100%;display:flex;align-items:center;padding:0 16px;font-size:8px;letter-spacing:3px;text-transform:uppercase;font-weight:500}.ticker-scroll{display:flex;white-space:nowrap;animation:ticker 70s linear infinite;padding-left:40px}@keyframes ticker{to{transform:translateX(-50%)}}.ticker-item{font-size:10px;letter-spacing:1.5px;color:rgba(245,243,239,.72);padding-right:70px;display:flex;align-items:center;gap:10px}.ticker-item::before{content:'·';color:var(--gold);font-size:16px}
+#toasts{position:fixed;top:70px;right:20px;z-index:600;display:flex;flex-direction:column;gap:7px;pointer-events:none}.toast{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--blue);padding:11px 15px;max-width:300px;box-shadow:0 4px 20px rgba(0,0,0,.1);pointer-events:all;animation:toast-in .25s ease}.toast.comp{border-left-color:var(--purple)}.toast.heat{border-left-color:var(--red)}@keyframes toast-in{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}.toast-type{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);font-weight:500;margin-bottom:3px}.toast-text{font-size:11px;line-height:1.4}
+html[dir="rtl"] body{direction:rtl}html[dir="rtl"] .article{grid-template-columns:1fr 20px;border-left:1px solid var(--border);border-right:4px solid var(--border2)}html[dir="rtl"] .art-share-row{margin-left:0;margin-right:auto}html[dir="rtl"] .ticker-scroll{animation:none;padding-left:0;padding-right:40px}
+@media(max-width:1100px){.app{grid-template-columns:220px 1fr}.right-col{display:none}}
+@media(max-width:700px){header{padding:0 12px}.logo{font-size:21px;letter-spacing:3px}.vip-badge,.live-tag{display:none}nav{padding:0 12px}.app{grid-template-columns:1fr}.left-col{display:none}.stat-bar{grid-template-columns:repeat(2,1fr)}.search-bar{padding:9px 10px;flex-wrap:wrap}.search-input{min-width:100%}.det-body{padding:24px 16px 80px}.det-title{font-size:24px}#sel-bar{top:103px;padding:10px 12px;align-items:flex-start}.sel-actions{margin-left:0}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><div class="pip"></div>NOCTURNE INTEL v4.4</div>
+  <div class="hsep"></div>
+  <div class="live-tag"><div class="live-dot"></div>LIVE</div>
+  <div id="clock"></div>
+  <div class="lang-selector" id="lang-selector">
+    <span class="lang-current" id="lang-current">🇫🇷 FR ▾</span>
+    <div class="lang-menu" id="lang-menu"></div>
+  </div>
+  <div class="vip-badge">OWNER</div>
+</header>
+
+<nav id="tabs"></nav>
+
+<div id="sel-bar">
+  <span class="sel-count" id="sel-count" data-i18n="selectCount">0 article sélectionné</span>
+  <div class="sel-actions">
+    <button class="sel-btn" data-action="export-selected">📄 Exporter sélection</button>
+    <button class="sel-btn" data-action="share-selected">🔗 Partager sélection</button>
+    <button class="sel-btn danger" data-action="clear-selection">✕ Désélectionner tout</button>
+  </div>
+</div>
+
+<div class="app">
+  <aside class="left-col">
+    <div>
+      <div class="sec-title" data-i18n="stats">Statistiques</div>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-num gold" id="s-total">—</div><div class="stat-lbl" data-i18n="signals">Signaux</div></div>
+        <div class="stat-box"><div class="stat-num blue" id="s-24h">—</div><div class="stat-lbl" data-i18n="new24">Nouveaux 24h</div></div>
+        <div class="stat-box"><div class="stat-num red" id="s-now">—</div><div class="stat-lbl" data-i18n="nowUrgency">Urgence NOW</div></div>
+        <div class="stat-box"><div class="stat-num purple" id="s-comp">—</div><div class="stat-lbl" data-i18n="competitors">Concurrents</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="sec-title" data-i18n="trendRadar">Trend Radar</div>
+      <div class="trend-list" id="trend-list"></div>
+    </div>
+    <div>
+      <div class="sec-title"><span data-i18n="sourcesActive">Sources actives</span> — <span style="color:var(--gold)">20 <span data-i18n="feeds">feeds</span></span></div>
+      <div class="src-list" id="src-list"></div>
+    </div>
+    <div>
+      <button class="scr-btn" id="scr-btn" data-action="scrape" data-i18n="scrapeBtn">↻ Scraping = Scan des sources</button>
+      <div id="scr-msg"></div>
+    </div>
+  </aside>
+
+  <main class="center-col">
+    <div class="stat-bar">
+      <div class="sbc"><div class="sbc-val gold" id="sc-total">—</div><div class="sbc-lbl" data-i18n="displayedSignals">Signaux affichés</div><div class="sbc-sub" id="sc-time">—</div></div>
+      <div class="sbc"><div class="sbc-val red" id="sc-now">—</div><div class="sbc-lbl" data-i18n="nowUrgency">Urgence NOW</div><div class="sbc-sub">heat ≥ 90</div></div>
+      <div class="sbc"><div class="sbc-val purple" id="sc-comp">—</div><div class="sbc-lbl" data-i18n="competitors">Concurrents</div><div class="sbc-sub">hits détectés</div></div>
+      <div class="sbc"><div class="sbc-val gold" id="sc-src">20</div><div class="sbc-lbl">Sources RSS</div><div class="sbc-sub" data-i18n="directMode">mode direct</div></div>
+    </div>
+
+    <div class="search-bar">
+      <input class="search-input" id="q" data-i18n-placeholder="searchPh" placeholder="Chercher signaux, villes, DJs, tendances...">
+      <select class="sort-sel" id="sort-sel">
+        <option value="heat" data-i18n="sortHeat">Par heat score</option>
+        <option value="date" data-i18n="sortDate">Plus récent</option>
+      </select>
+      <select class="sort-sel" id="date-range-sel" style="min-width:80px">
+        <option value="24h">24H</option>
+        <option value="3d">3 jours</option>
+        <option value="7d" selected>7 jours</option>
+      </select>
+      <button class="go-btn" data-action="render">Go</button>
+    </div>
+
+    <div class="filters" id="filters"></div>
+    <div id="feed">
+      <div class="loading"><div class="spinner"></div><div class="load-text">Connexion aux sources live...</div></div>
+    </div>
+  </main>
+
+  <aside class="right-col">
+    <div class="rsec">
+      <div class="rsec-title">📋 <span data-i18n="briefDay">Brief du jour</span></div>
+      <div class="brief-box" id="brief-box">Chargement...</div>
+      <button class="brief-btn" data-action="brief" data-i18n="refresh">↻ Actualiser</button>
+    </div>
+    <div class="rsec">
+      <div class="rsec-title"><span data-i18n="cityPulse">City Pulse</span> <span data-i18n="tonight">TONIGHT</span></div>
+      <div class="city-grid" id="city-grid"></div>
+    </div>
+    <div class="rsec">
+      <div class="rsec-title" data-i18n="intelSignals">Intel Signals</div>
+      <div class="sig-list" id="sig-list"></div>
+    </div>
+  </aside>
+</div>
+
+<div id="detail">
+  <div class="det-topbar">
+    <button class="det-back-btn" data-action="close-detail" data-i18n="backFeed">← Retour au feed</button>
+    <span class="det-topbar-source" id="d-source"></span>
+    <div class="det-topbar-sep"></div>
+    <span class="det-heat" id="d-heat"></span>
+    <span class="det-urgency badge" id="d-urgency-badge"></span>
+  </div>
+  <div class="det-body">
+    <div id="d-title" class="det-title"></div>
+    <div class="det-meta" id="d-meta"></div>
+    <div id="d-excerpt" class="det-excerpt"></div>
+    <div id="d-comp" class="det-comp"></div>
+
+    <div class="det-action-row">
+      <a id="d-link" class="det-read-btn" target="_blank" rel="noopener noreferrer" data-i18n="readArticle">Lire l'article ↗</a>
+      <button class="social-btn" id="translate-btn" data-action="translate-detail" data-i18n="translate">🌐 Traduire</button>
+      <div class="share-sep"></div>
+      <span class="social-label" data-i18n="shareLabel">Partager :</span>
+      <a id="share-tw" class="social-btn" target="_blank" rel="noopener noreferrer">𝕏</a>
+      <a id="share-li" class="social-btn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a id="share-wa" class="social-btn" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+      <a id="share-mail" class="social-btn">✉ Email</a>
+      <button class="copy-link-btn" data-action="copy-article-link">🔗 Copier lien</button>
+    </div>
+
+    <div id="translate-box">
+      <div class="tr-head"><span id="tr-hdr">🌐 TRADUCTION</span><span class="tr-close" data-action="close-translate">✕</span></div>
+      <div id="translate-title" class="translate-title"></div>
+      <div id="translate-text" class="translate-text"></div>
+    </div>
+
+    <div class="det-divider"></div>
+    <div class="wiki-heading" data-i18n="wikiHeading">Wiki — Notes opérateur</div>
+    <div id="wiki-entries"></div>
+    <div class="wiki-form">
+      <textarea class="wiki-ta" id="wi" placeholder="Note stratégique, insight, action à prendre..."></textarea>
+      <div class="wiki-actions">
+        <input class="wiki-input" id="wauth" placeholder="Auteur" value="Owner" style="width:110px">
+        <select class="wiki-input" id="wrole"><option>Owner</option><option>Manager</option><option>Booker</option><option>Marketing</option></select>
+        <button class="go-btn" data-action="save-wiki">Sauvegarder</button>
+        <span id="wiki-msg"></span>
+      </div>
+    </div>
+
+    <div class="det-divider"></div>
+    <div class="share-heading" data-i18n="shareHeading">Partage horodaté</div>
+    <div class="share-row">
+      <input class="share-input" id="s-days" type="number" value="7" min="1" max="30" style="width:55px">
+      <span style="font-size:11px;color:var(--muted)" data-i18n="days">jours</span>
+      <input class="share-input" id="s-label" placeholder="Label ex: Pour investisseurs" style="width:200px">
+      <button class="go-btn" data-action="make-share">Générer lien</button>
+    </div>
+    <div id="share-result"><span id="share-url"></span><span class="copy-btn" data-action="copy-share">copier</span></div>
+
+    <div class="det-divider"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="go-btn outline" data-action="export-pdf-7">Export PDF 7j</button>
+      <button class="go-btn outline" data-action="export-pdf-30">Export PDF 30j</button>
+    </div>
+  </div>
+</div>
+
+<div id="export-modal">
+  <div class="export-box">
+    <button class="modal-close" data-action="close-export">✕</button>
+    <div class="export-title" data-i18n="exportSelection">EXPORT SÉLECTION</div>
+    <div class="export-sub" id="export-sub"></div>
+    <div class="export-list" id="export-list"></div>
+    <div class="export-format" id="export-format"></div>
+    <div class="export-actions">
+      <button class="go-btn" data-action="do-export" data-i18n="download">Télécharger</button>
+      <button class="go-btn" data-action="share-selection-link">🔗 Copier sélection</button>
+      <button class="go-btn outline" data-action="close-export" data-i18n="cancel">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<div class="ticker"><div class="ticker-lbl">LIVE</div><div class="ticker-scroll" id="ticker-scroll"></div></div>
+<div id="toasts"></div>
+
+<script>
+'use strict';
+
+const API = 'http://localhost:5050';
+const PROXY = 'https://api.allorigins.win/get?url=';
+const RSS_CACHE_KEY = 'ni_article_url_cache_v2';
+const RSS_PROXY_TIMEOUT = 11000;
+
+function loadUrlCache(){
+  try{return JSON.parse(localStorage.getItem(RSS_CACHE_KEY)||'{}')}catch(e){return {}}
+}
+function saveUrlCache(cache){
+  try{localStorage.setItem(RSS_CACHE_KEY, JSON.stringify(cache))}catch(e){}
+}
+
+// OPTIMISATION 1: Fusionner rememberArticleUrl + rememberArticleUrls
+function rememberArticleUrls(itemsOrItem){
+  const cache = loadUrlCache();
+  let changed = false;
+  const items = Array.isArray(itemsOrItem) ? itemsOrItem : [itemsOrItem];
+  items.forEach(article=>{
+    if(!article || !article.id) return;
+    const url = cleanUrl(article.article_url||article.validated_url||article.url||article.original_url||'',article.source_feed_url||'');
+    if(!url || isBadArticleUrl(url)) return;
+    cache[article.id] = {url,title:article.title||'',source:article.source||'',saved_at:new Date().toISOString()};
+    changed = true;
+  });
+  if(changed) saveUrlCache(cache);
+}
+
+async function fetchTextWithFallbacks(url){
+  const targets = [
+    {kind:'allorigins-json',url:PROXY+encodeURIComponent(url)},
+    {kind:'codetabs',url:'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(url)},
+    {kind:'thingproxy',url:'https://thingproxy.freeboard.io/fetch/'+url},
+    {kind:'direct',url}
+  ];
+  for(const target of targets){
+    try{
+      const r=await fetch(target.url,{signal:AbortSignal.timeout(RSS_PROXY_TIMEOUT)});
+      if(!r.ok) continue;
+      if(target.kind==='allorigins-json'){
+        const d=await r.json();
+        if(d && d.contents && String(d.contents).includes('<')) return d.contents;
+      }else{
+        const txt=await r.text();
+        if(txt && txt.includes('<')) return txt;
+      }
+    }catch(e){}
+  }
+  return '';
+}
+
+const CATS = [
+  ['','Tous'],['nightlife','Nightlife'],['tech','Tech'],['luxury','Luxury'],['music','Music'],['culture','Culture'],['biz','Business']
+];
+const FILTERS = [
+  ['','Tous'],['Ibiza','Ibiza'],['Berlin','Berlin'],['Dubai','Dubai'],['Paris','Paris'],['VIP','VIP'],['AI','AI'],['innovation','Innovation'],['__COMP__','⚡ Concurrents']
+];
+const LANGS = [
+  ['fr','🇫🇷','Français'],['en','🇬🇧','English'],['de','🇩🇪','Deutsch'],['es','🇪🇸','Español'],['it','🇮🇹','Italiano'],['pt','🇵🇹','Português'],['nl','🇳🇱','Nederlands'],['ja','🇯🇵','日本語'],['ko','🇰🇷','한국어'],['ar','🇸🇦','العربية']
+];
+const I18N = {
+  fr:{
+    stats:'Statistiques',signals:'Signaux',new24:'Nouveaux 24h',nowUrgency:'Urgence NOW',competitors:'Concurrents',displayedSignals:'Signaux affichés',directMode:'mode direct',searchPh:'Chercher signaux, villes, DJs, tendances...',sortHeat:'Par heat score',sortDate:'Plus récent',empty:'Aucun signal pour cette recherche.',
+    trendRadar:'Trend Radar',sourcesActive:'Sources actives',feeds:'feeds',briefDay:'Brief du jour',refresh:'Actualiser',cityPulse:'City Pulse',tonight:'TONIGHT',intelSignals:'Intel Signals',
+    scrapeBtn:'Scraping = Scan des sources',loadingMsg:'Chargement des sources...',demoLoaded:'Articles démo chargés',scrapingBg:'(scrape en arrière-plan)',rssLoadedCount:'posts < 7j chargés',signalsLoaded:'signaux < 7j chargés',demoFallback:'Mode démo : 5 articles exemple',
+    backFeed:'← Retour au feed',readArticle:'Lire l\'article ↗',translate:'🌐 Traduire',shareLabel:'Partager :',wikiHeading:'Wiki — Notes opérateur',shareHeading:'Partage horodaté',days:'jours',exportSelection:'EXPORT SÉLECTION',download:'Télécharger',cancel:'Annuler',selectCount:'article(s) sélectionné(s)'
+  },
+  en:{
+    stats:'Statistics',signals:'Signals',new24:'New 24h',nowUrgency:'NOW urgency',competitors:'Competitors',displayedSignals:'Displayed signals',directMode:'direct mode',searchPh:'Search signals, cities, DJs, trends...',sortHeat:'By heat score',sortDate:'Most recent',empty:'No signal for this search.',
+    trendRadar:'Trend Radar',sourcesActive:'Active sources',feeds:'feeds',briefDay:'Daily Brief',refresh:'Refresh',cityPulse:'City Pulse',tonight:'TONIGHT',intelSignals:'Intel Signals',
+    scrapeBtn:'Scanning sources',loadingMsg:'Loading sources...',demoLoaded:'Demo articles loaded',scrapingBg:'(scraping background)',rssLoadedCount:'posts < 7d loaded',signalsLoaded:'signals < 7d loaded',demoFallback:'Demo mode: 5 sample articles',
+    backFeed:'← Back to feed',readArticle:'Read article ↗',translate:'🌐 Translate',shareLabel:'Share:',wikiHeading:'Wiki — Operator Notes',shareHeading:'Timestamped Share',days:'days',exportSelection:'EXPORT SELECTION',download:'Download',cancel:'Cancel',selectCount:'article(s) selected'
+  },
+  de:{
+    stats:'Statistiken',signals:'Signale',new24:'Neu 24h',nowUrgency:'NOW-Dringlichkeit',competitors:'Konkurrenten',displayedSignals:'Angezeigte Signale',directMode:'Direktmodus',searchPh:'Signale, Städte, DJs, Trends suchen...',sortHeat:'Nach Heat Score',sortDate:'Neueste zuerst',empty:'Kein Signal für diese Suche.',
+    trendRadar:'Trend Radar',sourcesActive:'Aktive Quellen',feeds:'Feeds',briefDay:'Tages-Brief',refresh:'Aktualisieren',cityPulse:'Stadt-Puls',tonight:'HEUTE NACHT',intelSignals:'Intel-Signale',
+    scrapeBtn:'Quellen scannen',loadingMsg:'Quellen werden geladen...',demoLoaded:'Demo-Artikel geladen',scrapingBg:'(Hintergrund-Scan)',rssLoadedCount:'Beiträge < 7T geladen',signalsLoaded:'Signale < 7T geladen',demoFallback:'Demo-Modus: 5 Beispielartikel',
+    backFeed:'← Zurück zum Feed',readArticle:'Artikel lesen ↗',translate:'🌐 Übersetzen',shareLabel:'Teilen:',wikiHeading:'Wiki — Betriebsnotizen',shareHeading:'Zeitgestempelte Freigabe',days:'Tage',exportSelection:'AUSWAHL EXPORTIEREN',download:'Herunterladen',cancel:'Abbrechen',selectCount:'Artikel ausgewählt'
+  },
+  es:{
+    stats:'Estadísticas',signals:'Señales',new24:'Nuevas 24h',nowUrgency:'Urgencia NOW',competitors:'Competidores',displayedSignals:'Señales mostradas',directMode:'modo directo',searchPh:'Buscar señales, ciudades, DJs, tendencias...',sortHeat:'Por heat score',sortDate:'Más reciente',empty:'Ninguna señal para esta búsqueda.',
+    trendRadar:'Trend Radar',sourcesActive:'Fuentes activas',feeds:'feeds',briefDay:'Resumen diario',refresh:'Actualizar',cityPulse:'Pulse de ciudad',tonight:'ESTA NOCHE',intelSignals:'Señales Intel',
+    scrapeBtn:'Escaneando fuentes',loadingMsg:'Cargando fuentes...',demoLoaded:'Artículos demo cargados',scrapingBg:'(escaneo en segundo plano)',rssLoadedCount:'posts < 7d cargados',signalsLoaded:'señales < 7d cargadas',demoFallback:'Modo demo: 5 artículos de ejemplo',
+    backFeed:'← Volver al feed',readArticle:'Leer artículo ↗',translate:'🌐 Traducir',shareLabel:'Compartir:',wikiHeading:'Wiki — Notas del operador',shareHeading:'Compartir con marca de tiempo',days:'días',exportSelection:'EXPORTAR SELECCIÓN',download:'Descargar',cancel:'Cancelar',selectCount:'artículos seleccionados'
+  },
+  it:{
+    stats:'Statistiche',signals:'Segnali',new24:'Nuovi 24h',nowUrgency:'Urgenza NOW',competitors:'Concorrenti',displayedSignals:'Segnali mostrati',directMode:'modalità diretta',searchPh:'Cerca segnali, città, DJ, trend...',sortHeat:'Per heat score',sortDate:'Più recente',empty:'Nessun segnale per questa ricerca.',
+    trendRadar:'Trend Radar',sourcesActive:'Fonti attive',feeds:'feed',briefDay:'Briefing giornaliero',refresh:'Aggiorna',cityPulse:'Pulse cittadino',tonight:'STASERA',intelSignals:'Segnali Intel',
+    scrapeBtn:'Scansione fonti',loadingMsg:'Caricamento fonti...',demoLoaded:'Articoli demo caricati',scrapingBg:'(scansione in background)',rssLoadedCount:'post < 7g caricati',signalsLoaded:'segnali < 7g caricati',demoFallback:'Modalità demo: 5 articoli di esempio',
+    backFeed:'← Torna al feed',readArticle:'Leggi articolo ↗',translate:'🌐 Traduci',shareLabel:'Condividi:',wikiHeading:'Wiki — Note operatore',shareHeading:'Condivisione con timestamp',days:'giorni',exportSelection:'ESPORTA SELEZIONE',download:'Scarica',cancel:'Annulla',selectCount:'articoli selezionati'
+  },
+  pt:{
+    stats:'Estatísticas',signals:'Sinais',new24:'Novos 24h',nowUrgency:'Urgência NOW',competitors:'Concorrentes',displayedSignals:'Sinais exibidos',directMode:'modo direto',searchPh:'Pesquisar sinais, cidades, DJs, tendências...',sortHeat:'Por heat score',sortDate:'Mais recente',empty:'Nenhum sinal para esta pesquisa.',
+    trendRadar:'Trend Radar',sourcesActive:'Fontes ativas',feeds:'feeds',briefDay:'Resumo diário',refresh:'Atualizar',cityPulse:'Pulso da cidade',tonight:'ESTA NOITE',intelSignals:'Sinais Intel',
+    scrapeBtn:'Escaneando fontes',loadingMsg:'Carregando fontes...',demoLoaded:'Artigos demo carregados',scrapingBg:'(varredura em segundo plano)',rssLoadedCount:'posts < 7d carregados',signalsLoaded:'sinais < 7d carregados',demoFallback:'Modo demo: 5 artigos de exemplo',
+    backFeed:'← Voltar ao feed',readArticle:'Ler artigo ↗',translate:'🌐 Traduzir',shareLabel:'Compartilhar:',wikiHeading:'Wiki — Notas do operador',shareHeading:'Compartilhamento com data/hora',days:'dias',exportSelection:'EXPORTAR SELEÇÃO',download:'Baixar',cancel:'Cancelar',selectCount:'artigos selecionados'
+  },
+  nl:{
+    stats:'Statistieken',signals:'Signalen',new24:'Nieuw 24u',nowUrgency:'NOW urgentie',competitors:'Concurrenten',displayedSignals:'Getoonde signalen',directMode:'directe modus',searchPh:'Zoek signalen, steden, DJs, trends...',sortHeat:'Op heat score',sortDate:'Meest recent',empty:'Geen signaal voor deze zoekopdracht.',
+    trendRadar:'Trend Radar',sourcesActive:'Actieve bronnen',feeds:'feeds',briefDay:'Dagelijks Overzicht',refresh:'Vernieuwen',cityPulse:'Stad Pulse',tonight:'VANAVOND',intelSignals:'Intel Signalen',
+    scrapeBtn:'Bronnen scannen',loadingMsg:'Bronnen laden...',demoLoaded:'Demo-artikelen geladen',scrapingBg:'(achtergrondscanning)',rssLoadedCount:'posts < 7d geladen',signalsLoaded:'signalen < 7d geladen',demoFallback:'Demomodus: 5 voorbeeldartikel',
+    backFeed:'← Terug naar feed',readArticle:'Artikel lezen ↗',translate:'🌐 Vertalen',shareLabel:'Delen:',wikiHeading:'Wiki — Operatoropmerkingen',shareHeading:'Gedeeld met tijdstempel',days:'dagen',exportSelection:'SELECTIE EXPORTEREN',download:'Downloaden',cancel:'Annuleren',selectCount:'artikelen geselecteerd'
+  },
+  ja:{
+    stats:'統計',signals:'シグナル',new24:'24時間以内',nowUrgency:'NOW緊急度',competitors:'競合',displayedSignals:'表示中のシグナル',directMode:'ダイレクトモード',searchPh:'シグナル、都市、DJ、トレンドを検索...',sortHeat:'ヒートスコア順',sortDate:'新着順',empty:'この検索に一致するシグナルはありません。',
+    trendRadar:'トレンドレーダー',sourcesActive:'アクティブなソース',feeds:'フィード',briefDay:'毎日のブリーフ',refresh:'更新',cityPulse:'都市パルス',tonight:'今夜',intelSignals:'インテルシグナル',
+    scrapeBtn:'ソーススキャン中',loadingMsg:'ソース読み込み中...',demoLoaded:'デモ記事ロード済み',scrapingBg:'(バックグラウンドスキャン)',rssLoadedCount:'投稿 < 7日読み込み済み',signalsLoaded:'シグナル < 7日読み込み済み',demoFallback:'デモモード: 5つのサンプル記事',
+    backFeed:'← フィードに戻る',readArticle:'記事を読む ↗',translate:'🌐 翻訳',shareLabel:'共有:',wikiHeading:'Wiki — オペレーターノート',shareHeading:'タイムスタンプ付き共有',days:'日',exportSelection:'選択をエクスポート',download:'ダウンロード',cancel:'キャンセル',selectCount:'記事が選択されました'
+  },
+  ko:{
+    stats:'통계',signals:'시그널',new24:'24시간 신규',nowUrgency:'NOW 긴급',competitors:'경쟁사',displayedSignals:'표시된 시그널',directMode:'직접 모드',searchPh:'시그널, 도시, DJ, 트렌드 검색...',sortHeat:'히트 스코어순',sortDate:'최신순',empty:'검색 결과가 없습니다.',
+    trendRadar:'트렌드 레이더',sourcesActive:'활성 소스',feeds:'피드',briefDay:'일일 요약',refresh:'새로고침',cityPulse:'도시 펄스',tonight:'오늘 밤',intelSignals:'인텔 시그널',
+    scrapeBtn:'소스 스캔 중',loadingMsg:'소스 로드 중...',demoLoaded:'데모 기사 로드됨',scrapingBg:'(백그라운드 스캔)',rssLoadedCount:'포스트 < 7일 로드됨',signalsLoaded:'시그널 < 7일 로드됨',demoFallback:'데모 모드: 5개 샘플 기사',
+    backFeed:'← 피드로 돌아가기',readArticle:'기사 읽기 ↗',translate:'🌐 번역',shareLabel:'공유:',wikiHeading:'Wiki — 운영자 노트',shareHeading:'타임스탬프 공유',days:'일',exportSelection:'선택 항목 내보내기',download:'다운로드',cancel:'취소',selectCount:'기사가 선택됨'
+  },
+  ar:{
+    stats:'إحصاءات',signals:'إشارات',new24:'جديد خلال 24 ساعة',nowUrgency:'أولوية NOW',competitors:'منافسون',displayedSignals:'الإشارات المعروضة',directMode:'وضع مباشر',searchPh:'ابحث عن إشارات، مدن، DJs، اتجاهات...',sortHeat:'حسب درجة الحرارة',sortDate:'الأحدث',empty:'لا توجد إشارات لهذا البحث.',
+    trendRadar:'رادار الاتجاهات',sourcesActive:'المصادر النشطة',feeds:'مصادر',briefDay:'ملخص اليومي',refresh:'تحديث',cityPulse:'نبض المدينة',tonight:'الليلة',intelSignals:'إشارات الاستخبارات',
+    scrapeBtn:'جاري مسح المصادر',loadingMsg:'جاري تحميل المصادر...',demoLoaded:'تم تحميل مقالات العرض التوضيحي',scrapingBg:'(المسح في الخلفية)',rssLoadedCount:'مشاركات < 7 أيام محملة',signalsLoaded:'إشارات < 7 أيام محملة',demoFallback:'وضع العرض التوضيحي: 5 مقالات نموذجية',
+    backFeed:'← العودة إلى الفيد',readArticle:'اقرأ المقال ↗',translate:'🌐 ترجمة',shareLabel:'مشاركة:',wikiHeading:'Wiki — ملاحظات المشغل',shareHeading:'مشاركة مع الوقت والتاريخ',days:'أيام',exportSelection:'تصدير التحديد',download:'تحميل',cancel:'إلغاء',selectCount:'مقالات محددة'
+  }
+};
+
+const CAT_COLORS = {nightlife:'#8b6914',music:'#b83225',culture:'#6b3fa0',tech:'#1a4a7a',luxury:'#5d4e37',biz:'#1a6b3c'};
+const NIGHTLIFE_KW = ['club','nightclub','rave','techno','dj','festival','ibiza','berlin','dance','electronic','venue','vip','table','lineup','booking','bar','nightlife','disco','house','trance','edm','concert','gig'];
+const COMPETITORS = ['fabric','berghain','tresor','ushuaia','amnesia','pacha','rex club','shelter','output','dc10','circoloco','egg london','womb','corsica','village underground'];
+const CITIES = ['berlin','ibiza','london','paris','miami','tokyo','dubai','new york','nyc','amsterdam','barcelona','seoul','los angeles','las vegas','prague','budapest','rome','milan','singapore'];
+
+const FEEDS = [
+  {name:'Resident Advisor',url:'https://ra.co/xml/rss.xml',cat:'nightlife'},
+  {name:'Mixmag',url:'https://mixmag.net/rss.xml',cat:'nightlife'},
+  {name:'DJ Mag',url:'https://djmag.com/rss.xml',cat:'nightlife'},
+  {name:'Crack Magazine',url:'https://crackmagazine.net/feed',cat:'nightlife'},
+  {name:'XLR8R',url:'https://xlr8r.com/feed',cat:'nightlife'},
+  {name:'Nocturnal Times',url:'https://thenocturnaltimes.com/feed',cat:'nightlife'},
+  {name:'Pitchfork',url:'https://pitchfork.com/rss/news/feed/rss',cat:'music'},
+  {name:'NME',url:'https://www.nme.com/feed',cat:'music'},
+  {name:'Hypebeast',url:'https://hypebeast.com/feed',cat:'music'},
+  {name:'Wired',url:'https://www.wired.com/feed/rss',cat:'tech'},
+  {name:'TechCrunch',url:'https://techcrunch.com/feed',cat:'tech'},
+  {name:'The Verge',url:'https://www.theverge.com/rss/index.xml',cat:'tech'},
+  {name:'Fast Company',url:'https://www.fastcompany.com/latest/rss',cat:'tech'},
+  {name:'Dezeen',url:'https://feeds.feedburner.com/dezeen',cat:'luxury'},
+  {name:'Wallpaper*',url:'https://www.wallpaper.com/feed/rss',cat:'luxury'},
+  {name:'Robb Report',url:'https://robbreport.com/feed',cat:'luxury'},
+  {name:'Skift',url:'https://skift.com/feed/',cat:'biz'},
+  {name:'Eater',url:'https://www.eater.com/rss/index.xml',cat:'biz'},
+  {name:'Hospitality Net',url:'https://www.hospitalitynet.org/rss/rss_new.xml',cat:'biz'},
+  {name:'Nightclub & Bar',url:'https://www.nightclub.com/feed',cat:'biz'}
+];
+
+const DEMO_ARTICLES = [
+  {id:'d1',source:'Demo Intel',category:'nightlife',title:'Berghain launches private members app to regulate access',url:'',excerpt:'Signal de démonstration : accès digital, gestion de file et sélection club. Lien bascule volontairement vers une recherche exacte.',tags:['Berlin','App','Access'],heat_score:94,city:'berlin',competitor_hit:['berghain'],ingested_at:new Date(Date.now()-7200000).toISOString(),wiki_history:[]},
+  {id:'d2',source:'Demo Intel',category:'nightlife',title:'Ibiza 2026: cashless VIP payments reshape table service',url:'',excerpt:'Signal de démonstration : paiements cashless, VIP, traçabilité et revenus table service.',tags:['Ibiza','Cashless','VIP'],heat_score:91,city:'ibiza',competitor_hit:['ushuaia'],ingested_at:new Date(Date.now()-3600000).toISOString(),wiki_history:[]},
+  {id:'d3',source:'Demo Intel',category:'tech',title:'AI DJs read crowd biometrics in real time',url:'',excerpt:'Signal de démonstration : IA, analyse de foule et synchronisation BPM.',tags:['AI','Berlin','Innovation'],heat_score:88,city:'berlin',competitor_hit:[],ingested_at:new Date(Date.now()-10800000).toISOString(),wiki_history:[]},
+  {id:'d4',source:'Demo Intel',category:'luxury',title:'Dubai VIP table minimums surpass CHF 8,000',url:'',excerpt:'Signal de démonstration : pricing premium et montée en gamme des venues nightlife.',tags:['Dubai','VIP','Pricing'],heat_score:86,city:'dubai',competitor_hit:[],ingested_at:new Date(Date.now()-18000000).toISOString(),wiki_history:[]},
+  {id:'d5',source:'Demo Intel',category:'biz',title:'Sober nightlife becomes a premium revenue stream',url:'',excerpt:'Signal de démonstration : sober economy, adaptogens, revenus hors alcool.',tags:['Sober','Revenue','Strategy'],heat_score:83,city:'new york',competitor_hit:[],ingested_at:new Date(Date.now()-21600000).toISOString(),wiki_history:[]}
+];
+
+// OPTIMISATION 2: Centraliser l'état
+const AppState = {
+  currentCategory: '',
+  compFilterEnabled: false,
+  articles: [],
+  currentItems: [],
+  currentArticle: null,
+  selectedIds: new Set(),
+  exportFormat: 'pdf',
+  dateRange: '7d',
+
+  setCategory(cat){
+    this.currentCategory = cat;
+    this.selectedIds.clear();
+    updateSelBar();
+    render();
+  },
+
+  toggleSelect(id){
+    if(this.selectedIds.has(id)) this.selectedIds.delete(id);
+    else this.selectedIds.add(id);
+    updateSelBar();
+  },
+
+  clearSelection(){
+    this.selectedIds.clear();
+    updateSelBar();
+    render();
+  },
+
+  setArticles(items){
+    this.articles = items;
+    rememberArticleUrls(items);
+  },
+
+  getSelectedArticles(){
+    return Array.from(this.selectedIds)
+      .map(id=>this.articles.find(a=>a.id===id))
+      .filter(Boolean);
+  }
+};
+
+// OPTIMISATION 3: Unified Retry Fetch
+async function retryFetch(fetchers,timeout=7000){
+  for(let i=0;i<fetchers.length;i++){
+    const fetcher = fetchers[i];
+    try{
+      const result = await Promise.race([
+        fetcher(),
+        new Promise((_,r)=>setTimeout(()=>r(new Error('Timeout')),timeout))
+      ]);
+      if(result && String(result).trim()) return result;
+    }catch(e){}
+  }
+  return null;
+}
+
+// OPTIMISATION 4: TranslationObserver - Lazy Loading
+class TranslationObserver {
+  constructor(){
+    this.observer = new IntersectionObserver(e=>this.handle(e),{rootMargin:'100px'});
+    this.translating = new Set();
+  }
+
+  handle(entries){
+    entries.forEach(entry=>{
+      if(!entry.isIntersecting) return;
+      const idx = parseInt(entry.target.dataset.articleIndex,10);
+      const article = AppState.currentItems[idx];
+      if(!article || this.translating.has(article.id)) return;
+
+      const target = currentLanguage();
+      const titleNeedsTranslation = detectLang(article.title||'')!==target;
+      const excerptNeedsTranslation = detectLang(article.excerpt||'')!==target;
+
+      if(!titleNeedsTranslation && !excerptNeedsTranslation) return;
+
+      this.translating.add(article.id);
+      ensureArticleTranslation(article,target).then(()=>{
+        const titleEl = byId('art-title-'+idx);
+        const excEl = byId('art-excerpt-'+idx);
+        if(titleEl) titleEl.textContent = translatedField(article,'title');
+        if(excEl) excEl.textContent = translatedField(article,'excerpt');
+      }).finally(()=>this.translating.delete(article.id));
+    });
+  }
+
+  observe(element){
+    this.observer.observe(element);
+  }
+
+  unobserveAll(){
+    this.observer.disconnect();
+    this.translating.clear();
+  }
+}
+
+const translationManager = new TranslationObserver();
+
+// OPTIMISATION 5: SSEManager - Lifecycle
+const SSEManager = {
+  instance: null,
+  reconnectTimer: null,
+
+  start(){
+    this.stop();
+    try{
+      this.instance = new EventSource(`${API}/api/stream`);
+      this.instance.onmessage = e=>{
+        try{
+          const a = JSON.parse(e.data);
+          showToast(a.type, a.title?.slice(0,70)||'Nouvelle alerte');
+        }catch(_){}
+      };
+      this.instance.onerror = ()=>{
+        this.stop();
+        this.reconnectTimer = setTimeout(()=>this.start(),15000);
+      };
+    }catch(e){
+      this.reconnectTimer = setTimeout(()=>this.start(),15000);
+    }
+  },
+
+  stop(){
+    if(this.reconnectTimer) clearTimeout(this.reconnectTimer);
+    if(this.instance){
+      this.instance.close();
+      this.instance = null;
+    }
+  }
+};
+
+// OPTIMISATION 6: Unified SafeHTML
+const SafeHTML = {
+  escape(str){
+    const map = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
+    return String(str??'').replace(/[&<>"']/g,m=>map[m]);
+  },
+  text(str){ return this.escape(str); },
+  attr(str){ return this.escape(str).replace(/`/g,'&#96;'); }
+};
+
+const safe = (s)=>SafeHTML.text(s);
+const safeAttr = (s)=>SafeHTML.attr(s);
+
+function stripHtml(h){return String(h||'').replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim()}
+function deb(fn,ms){let t;return function(...args){clearTimeout(t);t=setTimeout(()=>fn.apply(this,args),ms)}}
+const renderDebounced = deb(render,350);
+function byId(id){return document.getElementById(id)}
+function setText(id,v){const e=byId(id); if(e) e.textContent=v??''}
+async function copyToClipboard(text){try{await navigator.clipboard.writeText(String(text||''));return true}catch(e){const ta=document.createElement('textarea');ta.value=String(text||'');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');ta.remove();return ok}}
+function showToast(type,text){const c=byId('toasts');const el=document.createElement('div');el.className='toast '+(type==='comp'?'comp':type==='heat'?'heat':'');const label=type==='heat'?'🔥 Heat Alert':type==='comp'?'⚡ Concurrent':'ℹ Info';el.innerHTML=`<div class="toast-type">${safe(label)}</div><div class="toast-text">${safe(text)}</div>`;c.appendChild(el);setTimeout(()=>el.remove(),5000)}
+
+function setCookieLang(lang){document.cookie=`nocturne_lang=${encodeURIComponent(lang)};path=/;max-age=${60*60*24*365};samesite=lax`;localStorage.setItem('ni_lang',lang)}
+function getCookieLang(){const m=document.cookie.match(/(?:^|;\s*)nocturne_lang=([^;]+)/);return m?decodeURIComponent(m[1]):(localStorage.getItem('ni_lang')||'fr')}
+function currentLanguage(){return getCookieLang()}
+function langMeta(code){return LANGS.find(l=>l[0]===code)||LANGS[0]}
+function getLangName(code){return (langMeta(code)||[])[2]||code}
+function applyDocumentDirection(lang=currentLanguage()){document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr'}
+function t(key){const lang=currentLanguage();return I18N[lang]?.[key]||I18N.fr[key]||key}
+function applyStaticI18n(){document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n)});document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{el.placeholder=t(el.dataset.i18nPlaceholder)});document.querySelectorAll('option[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n)})}
+function initLang(){const [code,flag]=langMeta(currentLanguage());setText('lang-current',`${flag} ${code.toUpperCase()} ▾`);applyDocumentDirection(code);applyStaticI18n()}
+
+function detectLang(text){
+  const v=(text||'').toLowerCase();
+  if(/[اأإء-ي]/.test(v)) return 'ar';
+  if(/[ぁ-んァ-ン]/.test(v)) return 'ja';
+  if(/[가-힣]/.test(v)) return 'ko';
+  if(/\b(the|is|are|was|were|with|from|this|that|have|been|will|for|and|but)\b/.test(v)) return 'en';
+  if(/\b(und|die|der|das|ist|sind|werden|haben|nicht|für|mit|auf)\b/.test(v)) return 'de';
+  if(/\b(los|las|del|que|con|por|para|una|este|como|más|pero)\b/.test(v)) return 'es';
+  if(/\b(les|des|est|sont|avec|pour|dans|une|sur|par|qui|que|pas)\b/.test(v)) return 'fr';
+  if(/\b(il|la|di|che|con|per|una|sono|del|della|non|più)\b/.test(v)) return 'it';
+  if(/[àâéèêëîïôùûüç]/.test(v)) return 'fr';
+  return 'en';
+}
+
+function getLangFlag(langCode){
+  const langFlags = {
+    'ar':'🇸🇦','en':'🇬🇧','de':'🇩🇪','es':'🇪🇸','it':'🇮🇹','pt':'🇵🇹','nl':'🇳🇱','ja':'🇯🇵','ko':'🇰🇷','fr':'🇫🇷'
+  };
+  return langFlags[langCode] || '🌐';
+}
+
+async function translateText(text,srcLang,tgtLang){
+  text = String(text || '').trim();
+  if(!text || srcLang===tgtLang) return text;
+
+  const cacheKey = `tr:${srcLang}:${tgtLang}:${text}`;
+  try{
+    const cached = sessionStorage.getItem(cacheKey);
+    if(cached) return cached;
+  }catch(e){}
+
+  const enc = encodeURIComponent(text.slice(0,900));
+  const pair = `${srcLang}|${tgtLang}`;
+
+  const fetchers = [
+    ()=>fetch(`https://api.mymemory.translated.net/get?q=${enc}&langpair=${pair}`,{signal:AbortSignal.timeout(7000)}).then(r=>r.json()).then(d=>d?.responseData?.translatedText),
+    ()=>fetch(PROXY+encodeURIComponent(`https://api.mymemory.translated.net/get?q=${enc}&langpair=${pair}`),{signal:AbortSignal.timeout(8000)}).then(r=>r.json()).then(raw=>{const d=JSON.parse(raw.contents||'{}');return d?.responseData?.translatedText}),
+    ()=>fetch(`https://lingva.ml/api/v1/${srcLang}/${tgtLang}/${enc}`,{signal:AbortSignal.timeout(7000)}).then(r=>r.json()).then(d=>d?.translation),
+    ()=>fetch(`https://translate.plausibility.cloud/api/v1/${srcLang}/${tgtLang}/${enc}`,{signal:AbortSignal.timeout(7000)}).then(r=>r.json()).then(d=>d?.translation)
+  ];
+
+  let tr = await retryFetch(fetchers);
+  tr = String(tr || '').trim();
+
+  if(tr && tr !== text && !/MYMEMORY|QUERY LENGTH/i.test(tr)){
+    try{sessionStorage.setItem(cacheKey,tr)}catch(e){}
+    return tr;
+  }
+
+  return null;
+}
+
+function translatedField(a,field){const lang=currentLanguage();return a?.i18n?.[lang]?.[field]||a?.[field]||''}
+async function ensureArticleTranslation(a,targetLang=currentLanguage()){
+  if(!a) return a;
+  a.i18n=a.i18n||{};
+  if(a.i18n[targetLang]?.title&&a.i18n[targetLang]?.excerpt) return a;
+
+  const titleSrc = detectLang(a.title || '');
+  const excerptSrc = detectLang(a.excerpt || '');
+
+  const titlePromise = titleSrc === targetLang
+    ? Promise.resolve(a.title || '')
+    : translateText(a.title || '', titleSrc, targetLang);
+
+  const excerptPromise = excerptSrc === targetLang
+    ? Promise.resolve(a.excerpt || '')
+    : translateText(a.excerpt || '', excerptSrc, targetLang);
+
+  const [title,excerpt]=await Promise.all([titlePromise, excerptPromise]);
+
+  a.i18n[targetLang]={
+    title:title||a.title||'',
+    excerpt:excerpt||a.excerpt||''
+  };
+  return a;
+}
+
+function cleanUrl(raw,baseUrl=''){
+  let u=String(raw||'').trim();
+  if(!u||u==='#') return '';
+  u=u.replace(/^<!\[CDATA\[|\]\]>$/g,'').replace(/&amp;/g,'&').trim();
+  const found=u.match(/https?:\/\/[^\s"'<>]+/i); if(found) u=found[0];
+  try{const url=baseUrl?new URL(u,baseUrl):new URL(u); if(!/^https?:$/.test(url.protocol)) return ''; url.hash=''; return url.href}catch(e){return ''}
+}
+function articleSearchUrl(a){return 'https://www.google.com/search?q='+encodeURIComponent([`"${a?.title||''}"`,a?.source||''].filter(Boolean).join(' '))}
+function isBadArticleUrl(url){
+  if(!url) return true;
+  try{const u=new URL(url);const p=u.pathname.replace(/\/+$/,'').toLowerCase();if(!p) return true;if(['/feed','/rss','/xml','/category','/tag','/tags','/news','/latest','/magazine/features'].some(x=>p.endsWith(x)))return true;if(/\/(feed|rss|tag|tags|category|author)\//.test(p))return true;return false}catch(e){return true}
+}
+function isLikelyDemoArticle(a){return String(a?.id||'').startsWith('d')}
+function getArticleUrl(a){
+  const validated=cleanUrl(a?.validated_url||a?.article_url||'',a?.source_feed_url||'');
+  if(validated&&!isBadArticleUrl(validated))return validated;
+  const direct=cleanUrl(a?.url||a?.original_url||'',a?.source_feed_url||'');
+  if(direct&&!isBadArticleUrl(direct)&&!isLikelyDemoArticle(a))return direct;
+  const cache = loadUrlCache();
+  if(a?.id && cache[a.id]?.url && !isBadArticleUrl(cache[a.id].url)) return cache[a.id].url;
+  return articleSearchUrl(a);
+}
+function articleLinkStatus(a){const url=getArticleUrl(a);return url.includes('google.com/search')?(isLikelyDemoArticle(a)?'Démo — recherche exacte':'Recherche exacte'):'URL article RSS'}
+
+function scoreHeat(title,desc,cat){const tx=((title||'')+' '+(desc||'')).toLowerCase();let s=40;if(cat==='nightlife')s+=25;if(cat==='luxury')s+=10;NIGHTLIFE_KW.forEach(k=>{if(tx.includes(k))s+=3});if(tx.includes('vip')||tx.includes('table'))s+=8;if(tx.includes('close')||tx.includes('scandal')||tx.includes('ban')||tx.includes('fine'))s+=15;if(tx.includes('innovat')||tx.includes('launch')||tx.includes('new ')||tx.includes('first'))s+=6;if(tx.includes('exclusive')||tx.includes('luxury')||tx.includes('premium'))s+=5;return Math.min(99,Math.max(10,s))}
+function detectCity(t){const tx=String(t||'').toLowerCase();return CITIES.find(c=>tx.includes(c))||null}
+function detectComp(t){const tx=String(t||'').toLowerCase();return COMPETITORS.filter(c=>tx.includes(c))}
+function getRssDescription(item){return item.querySelector('description')?.textContent||item.querySelector('summary')?.textContent||item.getElementsByTagName('content:encoded')[0]?.textContent||item.querySelector('content')?.textContent||''}
+function getRssDate(item){const raw=item.querySelector('pubDate')?.textContent||item.querySelector('published')?.textContent||item.querySelector('updated')?.textContent||new Date().toISOString();const d=new Date(raw);return Number.isNaN(d.getTime())?new Date().toISOString():d.toISOString()}
+function getLinkFromRssItem(item, feedUrl){
+  const candidates = [];
+  Array.from(item.querySelectorAll('link[href]')).forEach(link=>{
+    const rel = (link.getAttribute('rel') || 'alternate').toLowerCase();
+    const href = link.getAttribute('href');
+    if(href && (!rel || rel === 'alternate')) candidates.push(href);
+  });
+  Array.from(item.querySelectorAll('link')).forEach(link=>{
+    const txt = (link.textContent || '').trim();
+    if(txt) candidates.push(txt);
+  });
+  ['guid','id','comments'].forEach(tag=>{
+    const txt = item.querySelector(tag)?.textContent?.trim();
+    if(txt) candidates.push(txt);
+  });
+  const desc = getRssDescription(item);
+  const found = String(desc||'').match(/https?:\/\/[^\s"'<>]+/i);
+  if(found) candidates.push(found[0]);
+  for(const raw of candidates){
+    const u = cleanUrl(raw, feedUrl);
+    if(u && !isBadArticleUrl(u)) return u;
+  }
+  return '';
+}
+
+function parseRSS(xml,feed){
+  try{
+    const doc=new DOMParser().parseFromString(xml,'text/xml');
+    if(doc.querySelector('parsererror')) return [];
+
+    const items=Array.from(doc.querySelectorAll('item, entry')).slice(0,18);
+    const out = items.map((item,idx)=>{
+      const title=stripHtml(item.querySelector('title')?.textContent||'—');
+      const finalUrl=getLinkFromRssItem(item, feed.url);
+      const desc=getRssDescription(item);
+      const rawTags=Array.from(item.querySelectorAll('category')).map(c=>stripHtml(c.textContent)).filter(Boolean);
+      const tags=[...new Set(rawTags)].slice(0,4);
+      const hash=Math.abs((title+(finalUrl||feed.url)).split('').reduce((a,c)=>((a<<5)-a+c.charCodeAt(0))|0,0));
+      return {
+        id:`${feed.name}-${hash}`,
+        source:feed.name,
+        source_feed_url:feed.url,
+        category:feed.cat,
+        title,
+        original_url:finalUrl,
+        validated_url:finalUrl,
+        article_url:finalUrl,
+        url:finalUrl,
+        excerpt:stripHtml(desc).slice(0,300),
+        tags,
+        heat_score:scoreHeat(title,desc,feed.cat),
+        urgency:'WEEK',
+        city:detectCity(title+' '+desc),
+        competitor_hit:detectComp(title+' '+desc),
+        ingested_at:getRssDate(item),
+        wiki_notes:null,
+        wiki_history:[]
+      };
+    }).filter(a=>a.title && a.title !== '—' && a.article_url && !isBadArticleUrl(a.article_url));
+
+    rememberArticleUrls(out);
+    return out;
+  }catch(e){return []}
+}
+
+async function fetchFeed(feed){
+  const xml = await fetchTextWithFallbacks(feed.url);
+  if(!xml) return [];
+  return parseRSS(xml, feed);
+}
+
+function timeAgo(iso){if(!iso)return'—';const s=Math.max(0,Math.floor((Date.now()-new Date(iso))/1000));if(s<60)return s+'s';if(s<3600)return Math.floor(s/60)+'min';if(s<86400)return Math.floor(s/3600)+'h';return Math.floor(s/86400)+'j'}
+function updateClock(){setText('clock',new Date().toLocaleTimeString('fr-FR',{hour12:false,timeZone:'Europe/Paris'})+' Europe/Paris')}
+
+function buildUI(){
+  byId('tabs').innerHTML=CATS.map(([cat,label],i)=>`<div class="ntab ${i===0?'on':''}" data-cat="${safeAttr(cat)}">${safe(label)}</div>`).join('');
+  byId('filters').innerHTML=FILTERS.map(([kw,label],i)=>`<div class="chip ${i===0?'on':''} ${kw==='__COMP__'?'comp':''}" data-filter="${safeAttr(kw)}">${safe(label)}</div>`).join('');
+  byId('lang-menu').innerHTML=LANGS.map(([code,flag,name])=>`<div class="lang-option" data-lang="${code}" data-flag="${flag}" data-name="${safeAttr(name)}">${flag} ${safe(name)}</div>`).join('');
+  byId('export-format').innerHTML=['pdf','txt','csv','md','json'].map((f,i)=>`<div class="fmt-btn ${i===0?'on':''}" data-fmt="${f}">${f==='md'?'Markdown':f.toUpperCase()}</div>`).join('');
+  byId('trend-list').innerHTML=[['Immersive Venues',94],['AI × Nightlife',87],['Sober Economy',82],['Biometric VIP',76],['Hotel × Club',71],['Dynamic Pricing',68]].map(([n,v],i)=>`<div class="trend-item"><div class="trend-row"><span class="trend-name">${safe(n)}</span><span class="trend-pct">${v}</span></div><div class="trend-track"><div class="trend-fill ${i%2?'blue':''}" style="width:${v}%"></div></div></div>`).join('');
+  byId('src-list').innerHTML=FEEDS.slice(0,10).map(f=>`<div class="src-item"><div class="src-dot" style="background:${CAT_COLORS[f.cat]||'#888'}"></div>${safe(f.name)}<span class="src-ok">✓</span></div>`).join('');
+  byId('city-grid').innerHTML=[['Ibiza',99,'Peak Season'],['Berlin',97,'Berghain Open'],['Dubai',92,'HNWI Season'],['Miami',88,'Ultra Mode'],['Tokyo',84,'Womb Live'],['Seoul',81,'Festival Rise'],['London',79,'Fabric Wknd'],['Paris',75,'Rex Club']].map(c=>`<div class="city-cell"><div class="city-name">${safe(c[0])}</div><div class="city-temp ${c[1]>90?'hot gold':''}">${c[1]}°</div><div class="city-status">${safe(c[2])}</div></div>`).join('');
+  byId('sig-list').innerHTML=[['red','Disruption','Face-pay Fabric London — queues −73%.','London · 2h ago'],['','VIP Signal','Dubai table min. CHF 8 000 en Q1 2026.','Dubai · 5h ago'],['blue','Tech Move','AI DJs biométrie crowd BPM temps réel.','Berlin · 8h ago'],['','Trend Shift','Sober NYC $400M — adaptogens dominent.','NYC · 12h ago']].map(s=>`<div class="sig ${s[0]}"><div class="sig-type">${safe(s[1])}</div><div class="sig-text">${safe(s[2])}</div><div class="sig-from">${safe(s[3])}</div></div>`).join('');
+  const ticks=['IBIZA CASHLESS VIP','BERLIN BIOMETRIC CROWD','SOBER NIGHTLIFE PREMIUM','DUBAI TABLE VIP CHF 8 000','FABRIC LONDON FACE-PAY','AI DJS BPM TEMPS RÉEL','SPATIAL AUDIO VENUES','DYNAMIC PRICING +41%','SEOUL FESTIVAL RECORD','HOTEL-CLUB HYBRID'];
+  byId('ticker-scroll').innerHTML=[...ticks,...ticks].map(x=>`<span class="ticker-item">${safe(x)}</span>`).join('');
+}
+
+async function loadFeed(){
+  const feedEl = byId('feed');
+  if(!AppState.articles.length){
+    feedEl.innerHTML = '<div class="loading"><div class="spinner"></div><div class="load-text">Chargement des sources...</div></div>';
+  }
+
+  const timeoutPromise = new Promise((_,r) => setTimeout(() => r(new Error('Timeout global')), 25000));
+  const maxAge = 7 * 24 * 3600 * 1000;
+  const now = Date.now();
+
+  const filterByDate = (articles) => {
+    return articles.filter(a => {
+      const age = now - new Date(a.ingested_at).getTime();
+      return age <= maxAge;
+    });
+  };
+
+  try{
+    const raceResult = await Promise.race([
+      (async()=>{
+        try{
+          const r=await fetch(`${API}/api/signals?limit=120&sort=heat`,{signal:AbortSignal.timeout(3500)});
+          const data=await r.json();
+          if(Array.isArray(data)&&data.length){
+            return {type:'backend', articles:filterByDate(data.filter(a=>getArticleUrl(a) && !getArticleUrl(a).includes('google.com/search')))};
+          }
+        }catch(e){
+          console.log('Backend indisponible, essai RSS...');
+        }
+        return null;
+      })(),
+      timeoutPromise
+    ]);
+
+    if(raceResult?.type==='backend' && raceResult.articles.length){
+      AppState.setArticles(raceResult.articles);
+      render(); updateStats(); loadBrief();
+      showToast('info',`${AppState.articles.length} signaux < 7j chargés`);
+      return;
+    }
+  }catch(e){
+    console.log('Timeout ou erreur backend');
+  }
+
+  try{
+    const results=await Promise.race([
+      Promise.allSettled(FEEDS.map(fetchFeed)),
+      timeoutPromise
+    ]);
+    const live=(results||[]).flatMap(r=>r.status==='fulfilled'?r.value:[])
+      .filter(a=>a.article_url && !isBadArticleUrl(a.article_url));
+
+    if(live.length){
+      const uniq = new Map();
+      live.forEach(a=>{
+        const key = cleanUrl(a.article_url || a.url).replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,'');
+        if(!uniq.has(key)) uniq.set(key,a);
+      });
+      const filtered = filterByDate([...uniq.values()]);
+      AppState.setArticles(filtered.sort((a,b)=>(b.heat_score||0)-(a.heat_score||0)));
+      render(); updateStats(); loadBrief();
+      showToast('info',`${AppState.articles.length} posts < 7j chargés`);
+      return;
+    }
+  }catch(e){
+    console.log('Timeout ou erreur RSS');
+  }
+
+  console.log('Affichage articles démo');
+  AppState.setArticles([...DEMO_ARTICLES]);
+  AppState.selectedIds.clear();
+  updateSelBar();
+  render(); updateStats(); loadBrief();
+  showToast('info','Mode démo : 5 articles exemple');
+}
+
+async function render(){
+  const q=byId('q').value.trim().toLowerCase(), sort=byId('sort-sel').value;
+
+  const now = Date.now();
+  const dateRangeMs = AppState.dateRange==='24h' ? 24*3600*1000 : AppState.dateRange==='3d' ? 3*24*3600*1000 : 7*24*3600*1000;
+
+  let items=[...AppState.articles].filter(d=>{
+    const articleAge = now - new Date(d.ingested_at).getTime();
+    return articleAge <= dateRangeMs;
+  });
+
+  if(AppState.currentCategory) items=items.filter(d=>d.category===AppState.currentCategory);
+  if(AppState.compFilterEnabled) items=items.filter(d=>d.competitor_hit&&d.competitor_hit.length);
+  if(q) items=items.filter(d=>(d.title||'').toLowerCase().includes(q)||(d.excerpt||'').toLowerCase().includes(q)||(d.source||'').toLowerCase().includes(q)||(d.city||'').toLowerCase().includes(q)||(d.tags||[]).some(x=>String(x).toLowerCase().includes(q)));
+  if(sort==='date') items.sort((a,b)=>new Date(b.ingested_at)-new Date(a.ingested_at)); else items.sort((a,b)=>(b.heat_score||0)-(a.heat_score||0));
+  AppState.currentItems=items.slice(0,60);
+  setText('sc-total',AppState.currentItems.length);setText('sc-now',AppState.currentItems.filter(d=>(d.heat_score||0)>=90).length);setText('sc-comp',AppState.currentItems.filter(d=>d.competitor_hit&&d.competitor_hit.length).length);setText('sc-time',new Date().toLocaleTimeString('fr-FR',{hour12:false}));
+  const feed=byId('feed');
+  if(!AppState.currentItems.length){feed.innerHTML=`<div class="empty-state">${safe(t('empty'))}</div>`;return}
+  feed.innerHTML=AppState.currentItems.map((d,i)=>{
+    const color=CAT_COLORS[d.category]||'#888', heatClass=(d.heat_score>=90)?'max':(d.heat_score>=70)?'high':'', sel=AppState.selectedIds.has(d.id);
+    const lang=detectLang(`${d.title||''} ${d.excerpt||''}`), [curLang,curFlag]=langMeta(currentLanguage());
+    const langFlag=getLangFlag(lang);
+    const url=getArticleUrl(d), urlEnc=encodeURIComponent(url), title=translatedField(d,'title'), exc=translatedField(d,'excerpt');
+    return `<article class="article ${sel?'selected':''}" id="art-${i}" data-article-index="${i}" style="animation-delay:${i*.02}s;border-left-color:${color}">
+      <div class="art-check ${sel?'checked':''}" data-action="toggle-select" data-index="${i}" data-id="${safeAttr(d.id)}"></div>
+      <div class="art-body">
+        <div class="art-meta">
+          <span class="art-source" style="color:${color}">${safe(d.source)}</span>
+          <span class="art-cat">${safe(d.category)}</span>
+          ${isLikelyDemoArticle(d)?'<span class="badge badge-demo">DEMO</span>':''}
+          ${lang!==curLang?`<span class="badge badge-today" data-action="quick-translate" data-index="${i}">${curFlag} Traduire post</span>`:''}
+          ${d.heat_score>=90?'<span class="badge badge-now">NOW</span>':d.heat_score>=70?'<span class="badge badge-today">TODAY</span>':''}
+          ${d.wiki_notes?'<span class="badge badge-wiki">Wiki</span>':''}
+          ${d.competitor_hit&&d.competitor_hit.length?'<span class="badge badge-comp">⚡</span>':''}
+        </div>
+        <div class="art-title" id="art-title-${i}" data-action="open-detail" data-index="${i}">${langFlag} ${safe(title)}</div>
+        <div class="art-excerpt" id="art-excerpt-${i}" data-action="open-detail" data-index="${i}">${safe(exc)}</div>
+        <div class="art-foot">
+          <span class="art-time">${safe(timeAgo(d.ingested_at))}</span>
+          ${d.city?`<span class="art-tag">${safe(d.city)}</span>`:''}
+          <span class="art-heat ${heatClass}">${safe(d.heat_score||'—')}</span>
+          <div class="art-share-row">
+            <button class="art-share-btn" data-action="open-url" data-index="${i}" title="${safeAttr(articleLinkStatus(d))}">↗</button>
+            <a class="art-share-btn" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(d.title||'')}&url=${urlEnc}" target="_blank" rel="noopener noreferrer">𝕏</a>
+            <a class="art-share-btn" href="https://wa.me/?text=${encodeURIComponent((d.title||'')+' '+url)}" target="_blank" rel="noopener noreferrer">W</a>
+            <a class="art-share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=${urlEnc}" target="_blank" rel="noopener noreferrer">in</a>
+            <button class="art-share-btn" data-action="copy-link" data-index="${i}">🔗</button>
+            <button class="art-share-btn det" data-action="open-detail" data-index="${i}">+</button>
+          </div>
+        </div>
+      </div>
+    </article>`
+  }).join('');
+
+  translationManager.unobserveAll();
+  document.querySelectorAll('[data-article-index]').forEach(el=>{
+    translationManager.observe(el);
+  });
+}
+
+function updateStats(){
+  const total=AppState.articles.length, now=AppState.articles.filter(a=>(a.heat_score||0)>=90).length, comp=AppState.articles.filter(a=>a.competitor_hit&&a.competitor_hit.length).length, day=AppState.articles.filter(a=>Date.now()-new Date(a.ingested_at)<86400000).length;
+  setText('s-total',total);setText('s-24h',day);setText('s-now',now);setText('s-comp',comp)
+}
+function updateSelBar(){const bar=byId('sel-bar'), count=byId('sel-count');if(AppState.selectedIds.size){bar.classList.add('on');count.textContent=`${AppState.selectedIds.size} article${AppState.selectedIds.size>1?'s':''} sélectionné${AppState.selectedIds.size>1?'s':''}`}else bar.classList.remove('on')}
+function toggleSelect(i,id){AppState.toggleSelect(id);const art=byId('art-'+i),chk=art?.querySelector('.art-check');if(art&&chk){art.classList.toggle('selected',AppState.selectedIds.has(id));chk.classList.toggle('checked',AppState.selectedIds.has(id))}}
+function clearSelection(){AppState.clearSelection()}
+function getSelectedArticles(){return AppState.getSelectedArticles()}
+function openArticleUrl(i){const a=AppState.currentItems[i]||AppState.currentArticle;if(a)window.open(getArticleUrl(a),'_blank','noopener,noreferrer')}
+
+async function quickTranslate(i){
+  const a=AppState.currentItems[i]; if(!a) return;
+  await ensureArticleTranslation(a,currentLanguage());
+  const title=byId('art-title-'+i), exc=byId('art-excerpt-'+i);
+  if(title) title.textContent=translatedField(a,'title');
+  if(exc) exc.textContent=translatedField(a,'excerpt');
+}
+function buildMailto(a,url){return `mailto:?subject=${encodeURIComponent(a.title||'Signal Nocturne Intel')}&body=${encodeURIComponent(`Signal Nocturne Intel : ${a.title||''}\n\n${a.excerpt||''}\n\nLire : ${url}`)}`}
+
+async function openDetail(i){
+  const d=AppState.currentItems[i]; if(!d)return; AppState.currentArticle=d;
+  if(detectLang(d.title||'')!==currentLanguage() || detectLang(d.excerpt||'')!==currentLanguage()) await ensureArticleTranslation(d,currentLanguage());
+  setText('d-source',`${d.source} · ${(d.category||'').toUpperCase()}`);setText('d-heat','HEAT '+(d.heat_score||'—'));setText('d-title',translatedField(d,'title'));setText('d-excerpt',translatedField(d,'excerpt')||'');
+  const ub=byId('d-urgency-badge'); if(d.heat_score>=90){ub.textContent='NOW';ub.className='det-urgency badge badge-now'}else if(d.heat_score>=70){ub.textContent='TODAY';ub.className='det-urgency badge badge-today'}else{ub.textContent='';ub.className='det-urgency'}
+  byId('d-meta').innerHTML=`<span>${safe(timeAgo(d.ingested_at))} ago</span>${d.city?`<span class="det-city">${safe(d.city)}</span>`:''}`;
+  const comp=byId('d-comp'); if(d.competitor_hit&&d.competitor_hit.length){comp.textContent='⚡ Concurrent détecté : '+d.competitor_hit.join(', ');comp.classList.add('on')}else comp.classList.remove('on');
+  const url=getArticleUrl(d), titleEnc=encodeURIComponent(d.title||''), urlEnc=encodeURIComponent(url);
+  const lk=byId('d-link'); lk.href=url; lk.textContent=articleLinkStatus(d)+' ↗';
+  byId('share-tw').href=`https://twitter.com/intent/tweet?text=${titleEnc}&url=${urlEnc}`;
+  byId('share-li').href=`https://www.linkedin.com/sharing/share-offsite/?url=${urlEnc}`;
+  byId('share-wa').href=`https://wa.me/?text=${encodeURIComponent((d.title||'')+' '+url)}`;
+  byId('share-mail').href=buildMailto(d,url);
+  renderWiki(d.wiki_history||[]); byId('wi').value=''; setText('wiki-msg',''); byId('share-result').classList.remove('on'); closeTranslate();
+  byId('detail').classList.add('on'); byId('detail').scrollTop=0;
+}
+function closeDetail(){byId('detail').classList.remove('on');AppState.currentArticle=null;SSEManager.stop()}
+async function translateArticle(){
+  if(!AppState.currentArticle)return;
+  const box=byId('translate-box');
+  if(box.style.display==='block'){closeTranslate();return}
+  const tgt=currentLanguage();
+  const titleSrc=detectLang(AppState.currentArticle.title||'');
+  const excerptSrc=detectLang(AppState.currentArticle.excerpt||'');
+  const [,tgtFlag]=langMeta(tgt);
+  box.style.display='block';
+  setText('tr-hdr',`🌐 → ${tgtFlag||'🌐'} TRADUCTION`);
+  setText('translate-title','Traduction en cours...');
+  setText('translate-text','');
+  const [tt,te]=await Promise.all([
+    titleSrc===tgt ? Promise.resolve(AppState.currentArticle.title||'') : translateText(AppState.currentArticle.title||'',titleSrc,tgt),
+    excerptSrc===tgt ? Promise.resolve(AppState.currentArticle.excerpt||'') : translateText(AppState.currentArticle.excerpt||'',excerptSrc,tgt)
+  ]);
+  if(tt || te){
+    setText('translate-title',tt||AppState.currentArticle.title||'');
+    setText('translate-text',te||AppState.currentArticle.excerpt||'');
+  }else{
+    const enc = encodeURIComponent(`${AppState.currentArticle.title||''}.${AppState.currentArticle.excerpt||''}`.slice(0,1200));
+    byId('translate-title').textContent = AppState.currentArticle.title || '';
+    byId('translate-text').innerHTML = `Traduction automatique indisponible via les API publiques.<br><br><a href="https://translate.google.com/?sl=auto&tl=${safeAttr(tgt)}&text=${enc}" target="_blank" rel="noopener noreferrer" style="color:var(--blue);border:1px solid var(--blue);padding:7px 12px;text-decoration:none;display:inline-block">Ouvrir Google Translate ↗</a>`;
+  }
+}
+function closeTranslate(){byId('translate-box').style.display='none'}
+function renderWiki(entries){const el=byId('wiki-entries');if(!entries.length){el.innerHTML='<p style="font-size:11px;color:var(--muted);margin-bottom:12px">Aucune note pour ce signal.</p>';return}el.innerHTML=entries.map(e=>`<div class="we"><div class="we-meta"><span>v${safe(e.version)}</span><span>${safe(e.author)}</span><span class="role">${safe(e.role||'')}</span><span>${safe(new Date(e.created_at).toLocaleString('fr-FR'))}</span></div><div class="we-text">${safe(e.note)}</div></div>`).join('')}
+async function saveWiki(){const note=byId('wi').value.trim(),author=byId('wauth').value.trim()||'Owner',role=byId('wrole').value,msg=byId('wiki-msg');if(!note||!AppState.currentArticle)return;try{const r=await fetch(`${API}/api/wiki/${encodeURIComponent(AppState.currentArticle.id)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({note,author,role}),signal:AbortSignal.timeout(3000)});const d=await r.json();msg.textContent='✓ v'+d.version;msg.style.color='var(--green)'}catch(e){AppState.currentArticle.wiki_history=AppState.currentArticle.wiki_history||[];const v=AppState.currentArticle.wiki_history.length+1;AppState.currentArticle.wiki_history.unshift({note,author,role,version:v,created_at:new Date().toISOString()});AppState.currentArticle.wiki_notes=note;msg.textContent='✓ v'+v+' (local)';msg.style.color='var(--green)'}byId('wi').value='';renderWiki(AppState.currentArticle.wiki_history||[]);render()}
+
+function exportSelected(){const items=getSelectedArticles();if(!items.length)return;setText('export-sub',`${items.length} article${items.length>1?'s':''} sélectionné${items.length>1?'s':''}`);byId('export-list').innerHTML=items.map(a=>`<div class="export-item"><div class="src-dot" style="background:${CAT_COLORS[a.category]||'#888'};width:8px;height:8px"></div><div><strong>${safe(a.title)}</strong><br><span style="font-size:9px;color:var(--muted)">${safe(a.source)} · ${safe(a.category)}</span></div></div>`).join('');byId('export-modal').classList.add('on')}
+function closeExport(){byId('export-modal').classList.remove('on')}
+function formatArticle(a,i){const meta=[a.source,(a.category||'').toUpperCase(),a.city||null,'Heat '+a.heat_score].filter(Boolean).join(' · ');return `${i+1}. ${a.title} [${meta}]\n${a.excerpt||'—'}\n${getArticleUrl(a)||'(pas de lien)'}`}
+function downloadBlob(name,type,content){const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const el=document.createElement('a');el.href=url;el.download=name;el.click();setTimeout(()=>URL.revokeObjectURL(url),300)}
+function doExport(){
+  const items=getSelectedArticles();if(!items.length)return;const date=new Date().toLocaleString('fr-FR'), filename='nocturne-intel-'+new Date().toISOString().slice(0,10);
+  if(AppState.exportFormat==='pdf'){let html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Nocturne Intel</title><style>body{font-family:Georgia,serif;max-width:720px;margin:40px auto;color:#1a1814;font-size:14px;line-height:1.6}h1{font-size:18px;letter-spacing:5px;text-transform:uppercase;border-bottom:2px solid #1a1814;padding-bottom:10px}.gen,.meta,.lien{font-family:monospace;color:#777;font-size:11px}.art{margin:36px 0;padding-bottom:28px;border-bottom:1px solid #ddd;page-break-inside:avoid}h2{font-size:20px;font-weight:400;line-height:1.3}</style></head><body><h1>Nocturne Intel</h1><div class="gen">Export · ${safe(date)} · ${items.length} signaux</div>`;items.forEach((a,i)=>{const meta=[a.source,(a.category||'').toUpperCase(),a.city||null,'Heat '+a.heat_score].filter(Boolean).join(' · ');const url=getArticleUrl(a);html+=`<div class="art"><div class="meta">${i+1}. [${safe(meta)}]</div><h2>${safe(a.title)}</h2><p>${safe(a.excerpt||'—')}</p><div class="lien"><a href="${safeAttr(url)}">${safe(url)}</a></div></div>`});html+='</body></html>';const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>w.print(),450);closeExport();return}
+  if(AppState.exportFormat==='txt'){downloadBlob(filename+'.txt','text/plain;charset=utf-8',['NOCTURNE INTEL — Export',date,'='.repeat(60),'',...items.flatMap((a,i)=>[formatArticle(a,i),'','—'.repeat(60),''])].join('\n'))}
+  if(AppState.exportFormat==='md'){downloadBlob(filename+'.md','text/markdown;charset=utf-8',`# Nocturne Intel — Export\n*${date} · ${items.length} signaux*\n\n`+items.map((a,i)=>`## ${i+1}. ${a.title}\n\n${a.excerpt||'—'}\n\n${getArticleUrl(a)}\n`).join('\n---\n'))}
+  if(AppState.exportFormat==='csv'){const esc=s=>'"'+String(s??'').replace(/"/g,'""')+'"';downloadBlob(filename+'.csv','text/csv;charset=utf-8','﻿'+'"N°","Titre","Source","Catégorie","Ville","Heat","Résumé","Lien","Date"\n'+items.map((a,i)=>[i+1,esc(a.title),esc(a.source),esc(a.category),esc(a.city||''),a.heat_score,esc(a.excerpt),esc(getArticleUrl(a)),esc(a.ingested_at)].join(',')).join('\n'))}
+  if(AppState.exportFormat==='json'){downloadBlob(filename+'.json','application/json;charset=utf-8',JSON.stringify(items.map((a,i)=>({numero:i+1,titre:a.title,source:a.source,categorie:a.category,ville:a.city||null,heat:a.heat_score,resume:a.excerpt||'',lien:getArticleUrl(a),date:a.ingested_at})),null,2))}
+  closeExport()
+}
+function shareSelected(){const items=getSelectedArticles();if(!items.length)return;const text='Nocturne Intel — Sélection :\n'+items.map(a=>`• ${a.title} (${a.source})\n  ${getArticleUrl(a)}`).join('\n\n');window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank','noopener,noreferrer')}
+function shareSelectionLink(){const items=getSelectedArticles();const text='Nocturne Intel — '+items.length+' signaux sélectionnés :\n'+items.map(a=>`• ${a.title} (${a.source}) ${getArticleUrl(a)}`).join('\n');copyToClipboard(text).then(()=>showToast('info','Sélection copiée'))}
+
+async function makeShare(){const days=parseInt(byId('s-days').value)||7,label=byId('s-label').value.trim();const base=AppState.currentArticle?getArticleUrl(AppState.currentArticle):location.href;setText('share-url',`${base}${base.includes('?')?'&':'?'}ni_expire=${days}&label=${encodeURIComponent(label)}`);byId('share-result').classList.add('on')}
+function copyShare(){copyToClipboard(byId('share-url').textContent).then(()=>{const el=document.querySelector('#share-result .copy-btn');if(el){el.textContent='✓ copié';setTimeout(()=>el.textContent='copier',2000)}})}
+function copyArticleLink(){const url=AppState.currentArticle?getArticleUrl(AppState.currentArticle):location.href;copyToClipboard(url).then(()=>showToast('info','Lien copié'))}
+function copyLink(i){const a=AppState.currentItems[i];if(a)copyToClipboard(getArticleUrl(a)).then(()=>showToast('info','Lien copié'))}
+function exportPDF(days){exportSelected(); if(!AppState.selectedIds.size && AppState.currentItems.length){AppState.selectedIds.add(AppState.currentItems[0].id);exportSelected()} showToast('info',`Utilise Export sélection > PDF pour ${days}j`)}
+
+async function scrape(){const btn=byId('scr-btn'),msg=byId('scr-msg');btn.disabled=true;btn.textContent='↻ En cours...';msg.style.display='block';msg.style.color='var(--muted)';msg.textContent='Chargement...';try{await fetch(`${API}/api/scrape`,{method:'POST',signal:AbortSignal.timeout(3000)});msg.textContent='✓ Scrape backend lancé';msg.style.color='var(--green)';setTimeout(loadFeed,2500)}catch(e){await loadFeed();msg.textContent='✓ Scraping RSS direct terminé';msg.style.color='var(--green)'}btn.disabled=false;btn.textContent='↻ Scraping = Scan des sources'}
+function loadBrief(){const el=byId('brief-box');if(AppState.articles.length){const top=[...AppState.articles].sort((a,b)=>(b.heat_score||0)-(a.heat_score||0)).slice(0,5);el.textContent=top.map((a,i)=>`${i+1}. [${a.heat_score}] ${a.source} — ${a.title.slice(0,80)}`).join('\n\n')}else el.textContent='Lance le feed pour voir le brief.'}
+
+function setLang(code,flag,name){setCookieLang(code);setText('lang-current',`${flag} ${code.toUpperCase()} ▾`);byId('lang-menu').classList.remove('on');applyDocumentDirection(code);applyStaticI18n();render();if(AppState.currentArticle)openDetail(AppState.currentItems.findIndex(a=>a.id===AppState.currentArticle.id));showToast('info',`Langue : ${flag} ${name}`)}
+function setTab(cat,el){document.querySelectorAll('.ntab').forEach(x=>x.classList.remove('on'));el.classList.add('on');AppState.setCategory(cat)}
+function setFilter(kw,el){document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));el.classList.add('on');if(kw==='__COMP__'){AppState.compFilterEnabled=true;byId('q').value=''}else{AppState.compFilterEnabled=false;byId('q').value=kw}render()}
+
+document.addEventListener('click',e=>{
+  const langSelector=byId('lang-selector');
+  if(e.target.id==='lang-current'){byId('lang-menu').classList.toggle('on');return}
+  if(langSelector&&!langSelector.contains(e.target)) byId('lang-menu').classList.remove('on');
+  const langOpt=e.target.closest('.lang-option'); if(langOpt){setLang(langOpt.dataset.lang,langOpt.dataset.flag,langOpt.dataset.name);return}
+  const tab=e.target.closest('.ntab'); if(tab){setTab(tab.dataset.cat,tab);return}
+  const chip=e.target.closest('.chip'); if(chip){setFilter(chip.dataset.filter,chip);return}
+  const fmt=e.target.closest('.fmt-btn'); if(fmt){document.querySelectorAll('.fmt-btn').forEach(b=>b.classList.remove('on'));fmt.classList.add('on');AppState.exportFormat=fmt.dataset.fmt;return}
+  const act=e.target.closest('[data-action]'); if(!act)return;
+  const a=act.dataset.action, i=Number(act.dataset.index);
+  if(a==='render') render();
+  if(a==='scrape') scrape();
+  if(a==='brief') loadBrief();
+  if(a==='toggle-select') toggleSelect(i,act.dataset.id);
+  if(a==='clear-selection') clearSelection();
+  if(a==='export-selected') exportSelected();
+  if(a==='share-selected') shareSelected();
+  if(a==='open-url') openArticleUrl(i);
+  if(a==='copy-link') copyLink(i);
+  if(a==='open-detail') openDetail(i);
+  if(a==='close-detail') closeDetail();
+  if(a==='translate-detail') translateArticle();
+  if(a==='close-translate') closeTranslate();
+  if(a==='copy-article-link') copyArticleLink();
+  if(a==='save-wiki') saveWiki();
+  if(a==='make-share') makeShare();
+  if(a==='copy-share') copyShare();
+  if(a==='export-pdf-7') exportPDF(7);
+  if(a==='export-pdf-30') exportPDF(30);
+  if(a==='close-export') closeExport();
+  if(a==='do-export') doExport();
+  if(a==='share-selection-link') shareSelectionLink();
+});
+byId('export-modal').addEventListener('click',e=>{if(e.target===byId('export-modal'))closeExport()});
+byId('q').addEventListener('input',renderDebounced);
+byId('sort-sel').addEventListener('change',render);
+byId('date-range-sel').addEventListener('change',e=>{
+  AppState.dateRange = e.target.value;
+  render();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeExport();closeTranslate();if(byId('detail').classList.contains('on'))closeDetail()}});
+
+window.addEventListener('beforeunload',()=>{
+  SSEManager.stop();
+  translationManager.unobserveAll();
+});
+
+buildUI();
+initLang();
+updateClock();setInterval(updateClock,1000);
+
+// Afficher les articles démo immédiatement
+AppState.setArticles([...DEMO_ARTICLES]);
+render(); updateStats(); loadBrief();
+showToast('info','Articles démo chargés (scrape en arrière-plan)');
+
+// Scrape en arrière-plan pour remplacer les démos
+loadFeed().catch(e => console.error('Erreur loadFeed:', e));
+SSEManager.start();
+setInterval(()=>{updateStats();loadBrief()},60000);
+setInterval(()=>{if(!byId('detail').classList.contains('on'))loadFeed()},180000);
+</script>
+</body>
+</html>
