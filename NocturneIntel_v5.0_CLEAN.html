@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>NOCTURNE INTEL — v5.0 English Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f3ef;--surface:#fff;--border:#e2ddd6;--text:#1a1814;--muted:#6b6560;--dim:#9c9690;
+  --gold:#8b6914;--gold-bg:#fdf6e3;--red:#b83225;--blue:#1a4a7a;--purple:#6b3fa0
+}
+html{font-size:14px}
+body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospace;font-weight:300;min-height:100vh;overflow-x:hidden}
+button,input,select,textarea{font-family:inherit}
+header{height:60px;background:var(--surface);border-bottom:2px solid var(--text);padding:0 28px;display:flex;align-items:center;gap:18px;position:sticky;top:0;z-index:200}
+.logo{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:6px;display:flex;align-items:center;gap:9px}
+.pip{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:pulse 1.3s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+.hsep{flex:1}
+.live-tag{display:flex;align-items:center;gap:6px;font-size:9px;color:var(--red);font-weight:500}
+#clock{font-size:10px;color:var(--muted)}
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;display:flex;overflow-x:auto;position:sticky;top:60px;z-index:199}
+.ntab{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:11px 16px;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:.15s}
+.ntab:hover{color:var(--text)}
+.ntab.on{color:var(--gold);border-bottom-color:var(--gold);font-weight:500}
+.app{display:grid;grid-template-columns:260px 1fr 260px;min-height:calc(100vh - 103px)}
+.left-col,.right-col{background:var(--surface);overflow-y:auto;max-height:calc(100vh - 103px);position:sticky;top:103px}
+.left-col{border-right:1px solid var(--border);padding:20px;display:flex;flex-direction:column;gap:24px}
+.sec-title{font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);font-weight:500;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-box{background:var(--bg);border:1px solid var(--border);padding:11px}
+.stat-num{font-family:'Bebas Neue',cursive;font-size:28px;line-height:1}
+.gold{color:var(--gold)}
+.stat-lbl{font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.center-col{background:var(--bg);display:flex;flex-direction:column}
+.stat-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border)}
+.sbc{background:var(--surface);padding:12px 14px}
+.sbc-val{font-family:'Bebas Neue',cursive;font-size:28px}
+.sbc-lbl{font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.search-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:9px 18px;display:flex;gap:9px;align-items:center}
+.search-input{flex:1;background:var(--bg);border:1px solid var(--border);padding:8px 11px;font-size:12px;outline:none}
+.search-input:focus{border-color:var(--gold)}
+.filters{background:var(--surface);border-bottom:1px solid var(--border);padding:7px 18px;display:flex;gap:5px;flex-wrap:wrap}
+.chip{font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:5px 10px;border:1px solid var(--border);color:var(--muted);cursor:pointer;user-select:none}
+.chip:hover{border-color:var(--border);color:var(--text)}
+.chip.on{border-color:var(--gold);color:var(--gold);background:var(--gold-bg);font-weight:500}
+#feed{padding:0 18px 80px;overflow-y:auto;flex:1}
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:60px;color:var(--muted);font-size:12px}
+.spinner{width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.article{background:var(--surface);border:1px solid var(--border);border-left:4px solid #d4a929;margin-top:10px;padding:14px;animation:fadeup .25s ease backwards}
+@keyframes fadeup{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.article:hover{box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.art-meta{display:flex;gap:7px;margin-bottom:5px;flex-wrap:wrap;font-size:9px}
+.art-source{letter-spacing:2px;text-transform:uppercase;font-weight:500}
+.art-title{font-family:'Playfair Display',serif;font-size:17px;line-height:1.35;margin-bottom:5px;cursor:pointer}
+.article:hover .art-title{color:var(--gold)}
+.art-excerpt{font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:7px}
+.art-time{font-size:9px;color:var(--dim)}
+.right-col{border-left:1px solid var(--border)}
+.rsec{padding:18px;border-bottom:1px solid var(--border)}
+.rsec-title{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+footer{background:#1a1a1a;color:white;padding:30px 20px;text-align:center;margin-top:60px}
+@media(max-width:1100px){.app{grid-template-columns:1fr}.right-col{display:none}}
+@media(max-width:700px){.logo{font-size:21px}.app{grid-template-columns:1fr}.left-col{display:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><div class="pip"></div>NOCTURNE INTEL v5.0</div>
+  <div class="hsep"></div>
+  <div class="live-tag"><span>🟢 LIVE</span></div>
+  <div id="clock"></div>
+</header>
+
+<nav id="tabs"></nav>
+
+<div class="app">
+  <aside class="left-col">
+    <div>
+      <div class="sec-title">Statistics</div>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-num gold" id="s-total">—</div><div class="stat-lbl">Signals</div></div>
+        <div class="stat-box"><div class="stat-num gold" id="s-24h">—</div><div class="stat-lbl">New 24h</div></div>
+        <div class="stat-box"><div class="stat-num red" id="s-now">—</div><div class="stat-lbl">Urgency NOW</div></div>
+        <div class="stat-box"><div class="stat-num purple" id="s-comp">—</div><div class="stat-lbl">Competitors</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="sec-title">Trend Radar</div>
+      <div id="trend-list"></div>
+    </div>
+  </aside>
+
+  <main class="center-col">
+    <div class="stat-bar">
+      <div class="sbc"><div class="sbc-val gold" id="sc-total">—</div><div class="sbc-lbl">Displayed</div></div>
+      <div class="sbc"><div class="sbc-val red" id="sc-now">—</div><div class="sbc-lbl">NOW</div></div>
+      <div class="sbc"><div class="sbc-val purple" id="sc-comp">—</div><div class="sbc-lbl">Competitors</div></div>
+      <div class="sbc"><div class="sbc-val gold" id="sc-src">20</div><div class="sbc-lbl">RSS Feeds</div></div>
+    </div>
+
+    <div class="search-bar">
+      <input class="search-input" id="q" placeholder="Search signals, trends...">
+      <button style="padding:8px 14px;background:#333;color:white;border:none;cursor:pointer">Search</button>
+    </div>
+
+    <div class="filters" id="filters"></div>
+    <div id="feed"><div class="loading"><div class="spinner"></div><div>Loading articles...</div></div></div>
+  </main>
+
+  <aside class="right-col">
+    <div class="rsec">
+      <div class="rsec-title">📊 Daily Brief</div>
+      <div style="padding:10px;background:var(--gold-bg);border-radius:4px">Premium nightlife intelligence digest refreshing in real-time.</div>
+    </div>
+    <div class="rsec">
+      <div class="rsec-title">🌍 City Pulse</div>
+      <div style="padding:10px;color:var(--muted)">Berlin • Ibiza • Dubai • Paris • Tokyo</div>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  <p>© 2026 NocturneIntel v5.0. English Edition. All rights reserved.</p>
+</footer>
+
+<script>
+'use strict';
+
+// Demo articles (English only)
+const DEMO_ARTICLES = [
+  {id:'d1',source:'Intel',category:'nightlife',title:'Berghain launches private members app to regulate access',excerpt:'Berlin club digitalizes selection with proprietary app for entrance control.',heat_score:94,city:'berlin',ingested_at:new Date(Date.now()-3600000).toISOString()},
+  {id:'d2',source:'Intel',category:'nightlife',title:'Ibiza 2026: cashless VIP payments reshape table service',excerpt:'Exclusive venues move to digital-only payment systems for premium tables.',heat_score:91,city:'ibiza',ingested_at:new Date(Date.now()-7200000).toISOString()},
+  {id:'d3',source:'Intel',category:'tech',title:'AI DJs read crowd biometrics in real time',excerpt:'Automated BPM synchronization based on audience engagement sensors.',heat_score:88,city:'berlin',ingested_at:new Date(Date.now()-10800000).toISOString()},
+  {id:'d4',source:'Intel',category:'luxury',title:'Dubai VIP table minimums surpass CHF 8,000',excerpt:'Premium nightlife pricing surge in Middle East boutique venues.',heat_score:86,city:'dubai',ingested_at:new Date(Date.now()-18000000).toISOString()},
+  {id:'d5',source:'Intel',category:'biz',title:'Sober nightlife becomes a premium revenue stream',excerpt:'Non-alcoholic venues capture upscale market segment with premium pricing.',heat_score:83,city:'new york',ingested_at:new Date(Date.now()-21600000).toISOString()}
+];
+
+let articles = [...DEMO_ARTICLES];
+let stats = {total:5, new24h:3, now:1, comp:2};
+
+// Init
+function init() {
+  updateClock();
+  renderStats();
+  renderArticles();
+  renderTrend();
+  setInterval(updateClock, 1000);
+}
+
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'});
+}
+
+function renderStats() {
+  document.getElementById('s-total').textContent = stats.total;
+  document.getElementById('s-24h').textContent = stats.new24h;
+  document.getElementById('s-now').textContent = stats.now;
+  document.getElementById('s-comp').textContent = stats.comp;
+  document.getElementById('sc-total').textContent = stats.total;
+  document.getElementById('sc-now').textContent = stats.now;
+  document.getElementById('sc-comp').textContent = stats.comp;
+}
+
+function renderTrend() {
+  const trends = [
+    {name:'Immersive Venues', pct:94},
+    {name:'AI × Nightlife', pct:87},
+    {name:'Sober Economy', pct:82},
+    {name:'Biometric VIP', pct:76},
+    {name:'Digital Payments', pct:71}
+  ];
+  const html = trends.map(t => `<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:10px">${t.name}</span><span style="color:var(--gold);font-weight:bold">${t.pct}</span></div><div style="height:3px;background:var(--border);border-radius:2px"><div style="height:100%;background:var(--gold);width:${t.pct}%;border-radius:2px"></div></div></div>`).join('');
+  document.getElementById('trend-list').innerHTML = html;
+}
+
+function renderArticles() {
+  const feed = document.getElementById('feed');
+  const html = articles.map((a,i) => `
+    <article class="article">
+      <div class="art-meta">
+        <span class="art-source" style="color:var(--gold)">${a.source}</span>
+        <span>${a.category}</span>
+        ${a.heat_score >= 90 ? '<span style="color:var(--red);font-weight:bold">🔥 NOW</span>' : ''}
+      </div>
+      <div class="art-title">${a.title}</div>
+      <div class="art-excerpt">${a.excerpt}</div>
+      <div style="display:flex;gap:10px;margin-top:10px">
+        <span class="art-time">${new Date(a.ingested_at).toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'})}</span>
+        <span style="margin-left:auto;color:var(--gold);font-weight:bold;font-size:18px">${a.heat_score}</span>
+      </div>
+    </article>
+  `).join('');
+  feed.innerHTML = html;
+}
+
+// Start
+document.addEventListener('DOMContentLoaded', init);
+</script>
+
+</body>
+</html>
