@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz — Quelle est votre orientation face à l'IA ?</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0d0d1a;
+      color: #e0e0f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 720px;
+      width: 100%;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #6c63ff, #a855f7);
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      color: #fff;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #a78bfa, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+
+    .header p {
+      color: #9090b0;
+      font-size: 1rem;
+    }
+
+    /* ── Progress ── */
+    .progress-bar-wrap {
+      background: #1e1e3a;
+      border-radius: 99px;
+      height: 6px;
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #6c63ff, #a855f7);
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+
+    .progress-label {
+      text-align: right;
+      font-size: 0.8rem;
+      color: #6060a0;
+      margin-bottom: 8px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: #12122a;
+      border: 1px solid #2a2a4a;
+      border-radius: 20px;
+      padding: 36px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    .question-number {
+      font-size: 0.78rem;
+      color: #6c63ff;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .question-text {
+      font-size: 1.2rem;
+      font-weight: 600;
+      line-height: 1.5;
+      margin-bottom: 28px;
+      color: #dde0ff;
+    }
+
+    /* ── Choices ── */
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .choice-btn {
+      background: #1a1a35;
+      border: 1.5px solid #2e2e52;
+      border-radius: 14px;
+      padding: 16px 20px;
+      color: #c0c0e0;
+      font-size: 0.95rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+      line-height: 1.4;
+    }
+
+    .choice-btn:hover {
+      border-color: #6c63ff;
+      background: #1e1e45;
+      color: #fff;
+    }
+
+    .choice-btn.selected {
+      border-color: #a855f7;
+      background: linear-gradient(135deg, #1e1040, #1a1a45);
+      color: #fff;
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+    }
+
+    /* ── Navigation ── */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 32px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 28px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: #6060a0;
+      border: 1.5px solid #2e2e52;
+    }
+
+    .btn-ghost:hover {
+      color: #c0c0e0;
+      border-color: #5050a0;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6c63ff, #a855f7);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(108, 99, 255, 0.4);
+    }
+
+    .btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ── Result ── */
+    .result { display: none; text-align: center; }
+
+    .result-emoji {
+      font-size: 4rem;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 20px rgba(168,85,247,0.5));
+    }
+
+    .result-profile {
+      font-size: 1.6rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #a78bfa, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .result-tagline {
+      font-size: 1rem;
+      color: #8080b0;
+      margin-bottom: 28px;
+      font-style: italic;
+    }
+
+    .result-desc {
+      background: #1a1a35;
+      border: 1px solid #2e2e52;
+      border-radius: 16px;
+      padding: 24px;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #c0c0e0;
+      text-align: left;
+      margin-bottom: 24px;
+    }
+
+    .traits {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    .trait {
+      background: #1e1e3a;
+      border: 1px solid #3a3a6a;
+      border-radius: 99px;
+      padding: 6px 16px;
+      font-size: 0.82rem;
+      color: #a0a0d0;
+    }
+
+    .score-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: #6060a0;
+      margin-bottom: 6px;
+    }
+
+    .score-bars { margin-bottom: 28px; }
+
+    .score-bar-row { margin-bottom: 14px; }
+
+    .score-bar-bg {
+      background: #1e1e3a;
+      border-radius: 99px;
+      height: 8px;
+      overflow: hidden;
+    }
+
+    .score-bar-fg {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 1s ease;
+    }
+
+    .btn-restart {
+      background: linear-gradient(135deg, #6c63ff, #a855f7);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 36px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-restart:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(108,99,255,0.4);
+    }
+
+    /* ── Intro ── */
+    .intro { text-align: center; }
+    .intro p { color: #9090b0; margin-bottom: 24px; line-height: 1.6; }
+    .intro .meta { font-size: 0.85rem; color: #5050a0; margin-bottom: 32px; }
+
+    /* hidden */
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="badge">Quiz IA</div>
+    <h1>Quelle est votre orientation face à l'Intelligence Artificielle ?</h1>
+    <p>Découvrez votre profil en 12 questions</p>
+  </div>
+
+  <div class="card">
+    <!-- INTRO -->
+    <div id="screen-intro" class="intro">
+      <p>Ce quiz explore votre rapport à l'IA : comment vous l'utilisez, ce que vous en pensez, et ce que vous en attendez. Il n'y a pas de bonne ou mauvaise réponse.</p>
+      <p class="meta">⏱ 3 à 5 minutes · 12 questions · Résultat immédiat</p>
+      <button class="btn btn-primary" onclick="startQuiz()">Commencer →</button>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="screen-quiz" class="hidden">
+      <div class="progress-label" id="progress-label">Question 1 / 12</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progress-bar"></div>
+      </div>
+      <div class="question-number" id="q-number">Question 1</div>
+      <div class="question-text" id="q-text"></div>
+      <div class="choices" id="q-choices"></div>
+      <div class="nav">
+        <button class="btn btn-ghost" id="btn-prev" onclick="prevQuestion()">← Précédent</button>
+        <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()" disabled>Suivant →</button>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div id="screen-result" class="result">
+      <div class="result-emoji" id="res-emoji"></div>
+      <div class="result-profile" id="res-profile"></div>
+      <div class="result-tagline" id="res-tagline"></div>
+      <div class="result-desc" id="res-desc"></div>
+      <div class="traits" id="res-traits"></div>
+      <div class="score-bars" id="res-bars"></div>
+      <button class="btn-restart" onclick="restart()">Refaire le quiz</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DONNÉES ───────────────────────────────────────────────────
+// Chaque réponse donne des points à une ou plusieurs dimensions :
+// E = Enthousiaste / A = Adaptateur / P = Prudent / S = Sceptique / C = Curieux
+
+const questions = [
+  {
+    text: "Quand vous entendez parler d'une nouvelle IA, quelle est votre première réaction ?",
+    choices: [
+      { text: "Je veux l'essayer immédiatement.", scores: { E: 3 } },
+      { text: "Je me demande à quoi ça pourrait me servir.", scores: { C: 2, A: 1 } },
+      { text: "J'attends de voir si c'est vraiment utile.", scores: { P: 2, A: 1 } },
+      { text: "Je reste méfiant·e, trop de promesses non tenues.", scores: { S: 3 } },
+    ]
+  },
+  {
+    text: "Comment utilisez-vous l'IA au quotidien ?",
+    choices: [
+      { text: "Intensément, pour presque tout ce que je fais.", scores: { E: 3 } },
+      { text: "Régulièrement, pour des tâches bien définies.", scores: { A: 3 } },
+      { text: "Occasionnellement, quand je n'ai pas le choix.", scores: { P: 2, S: 1 } },
+      { text: "Jamais ou presque, je préfère faire sans.", scores: { S: 3 } },
+    ]
+  },
+  {
+    text: "Quelle phrase résume le mieux votre rapport à la créativité de l'IA ?",
+    choices: [
+      { text: "Elle amplifie ma propre créativité.", scores: { E: 2, A: 1 } },
+      { text: "Elle est utile pour démarrer, mais je finalise toujours moi-même.", scores: { A: 3 } },
+      { text: "Je préfère que la créativité reste humaine.", scores: { P: 2 } },
+      { text: "Je ne lui fais pas confiance pour ça.", scores: { S: 3 } },
+    ]
+  },
+  {
+    text: "Quand une IA fait une erreur, comment réagissez-vous ?",
+    choices: [
+      { text: "Normal, je corrige et je continue.", scores: { E: 2, A: 1 } },
+      { text: "Je l'utilise pour mieux cadrer mes prochaines instructions.", scores: { A: 3, C: 1 } },
+      { text: "Ça renforce ma prudence sur ce que je lui confie.", scores: { P: 3 } },
+      { text: "Ça confirme que je ne peux pas lui faire confiance.", scores: { S: 3 } },
+    ]
+  },
+  {
+    text: "Comment percevez-vous l'impact de l'IA sur l'emploi ?",
+    choices: [
+      { text: "Elle va créer de nouvelles opportunités, globalement positif.", scores: { E: 3 } },
+      { text: "Il faudra s'adapter, c'est inévitable.", scores: { A: 3 } },
+      { text: "Je suis inquiet·e pour certains secteurs.", scores: { P: 3 } },
+      { text: "Elle va détruire des emplois, c'est dangereux.", scores: { S: 2, P: 1 } },
+    ]
+  },
+  {
+    text: "Face aux données personnelles et à la vie privée, vous pensez que l'IA…",
+    choices: [
+      { text: "…peut être régulée efficacement.", scores: { E: 1, A: 2 } },
+      { text: "…nécessite d'être utilisée avec discernement.", scores: { A: 2, P: 1 } },
+      { text: "…représente un risque réel qu'on sous-estime.", scores: { P: 3 } },
+      { text: "…est une menace pour nos libertés.", scores: { S: 3 } },
+    ]
+  },
+  {
+    text: "Que pensez-vous de confier des décisions importantes à une IA (médecine, justice…) ?",
+    choices: [
+      { text: "Ça peut aider à réduire les biais humains.", scores: { E: 2, C: 1 } },
+      { text: "Possible, avec une supervision humaine forte.", scores: { A: 3 } },
+      { text: "Très risqué, à encadrer strictement.", scores: { P: 3 } },
+      { text: "Totalement inacceptable.", scores: { S: 3 } },
+    ]
+  },
+  {
+    text: "Comment apprenez-vous à utiliser un nouvel outil IA ?",
+    choices: [
+      { text: "J'explore tout de suite, j'apprends en faisant.", scores: { E: 3, C: 1 } },
+      { text: "Je lis la doc ou des tutos pour bien démarrer.", scores: { A: 2, C: 2 } },
+      { text: "J'attends qu'un proche me montre.", scores: { P: 1, A: 1 } },
+      { text: "Je préfère ne pas en avoir à apprendre un nouveau.", scores: { S: 2 } },
+    ]
+  },
+  {
+    text: "L'IA générative (texte, image, musique…) vous inspire surtout…",
+    choices: [
+      { text: "De l'enthousiasme, c'est une révolution créative.", scores: { E: 3 } },
+      { text: "De la curiosité sur les nouvelles usages possibles.", scores: { C: 3 } },
+      { text: "Des questions sur les droits d'auteur et l'éthique.", scores: { P: 2, C: 1 } },
+      { text: "De l'inquiétude pour les artistes et créateurs.", scores: { S: 2, P: 1 } },
+    ]
+  },
+  {
+    text: "Comment décririez-vous votre niveau de confort technique avec l'IA ?",
+    choices: [
+      { text: "Très à l'aise, je suis les évolutions de près.", scores: { E: 2, C: 2 } },
+      { text: "Suffisant pour l'utiliser efficacement.", scores: { A: 3 } },
+      { text: "Basique, j'utilise sans vraiment comprendre.", scores: { P: 1, A: 1 } },
+      { text: "Limité, et ça me pose problème.", scores: { S: 1, P: 1 } },
+    ]
+  },
+  {
+    text: "D'ici 10 ans, l'IA dans notre société, c'est…",
+    choices: [
+      { text: "Une formidable opportunité pour l'humanité.", scores: { E: 3 } },
+      { text: "Un outil puissant qu'il faudra maîtriser collectivement.", scores: { A: 2, C: 1 } },
+      { text: "Un défi éthique et politique majeur.", scores: { P: 3 } },
+      { text: "Un risque existentiel qu'on ne prend pas assez au sérieux.", scores: { S: 3 } },
+    ]
+  },
+  {
+    text: "Si vous deviez conseiller un proche sur l'IA, vous lui diriez…",
+    choices: [
+      { text: "« Plonge dedans, ça va changer ta vie ! »", scores: { E: 3 } },
+      { text: "« Commence par ce qui t'est utile, adapte progressivement. »", scores: { A: 3 } },
+      { text: "« Utilise-la, mais reste vigilant·e sur ce que tu lui confies. »", scores: { P: 3 } },
+      { text: "« Méfie-toi, ce n'est pas aussi fiable qu'on le dit. »", scores: { S: 3 } },
+    ]
+  },
+];
+
+// ─── PROFILS ───────────────────────────────────────────────────
+const profiles = {
+  E: {
+    emoji: "🚀",
+    label: "L'Enthousiaste",
+    tagline: "\"L'IA est la meilleure chose qui soit arrivée à la productivité humaine.\"",
+    desc: "Vous êtes parmi les premiers à adopter les nouvelles technologies. Pour vous, l'IA est une opportunité extraordinaire d'amplifier les capacités humaines. Vous aimez expérimenter, tester les limites des outils et partager vos découvertes. Votre enthousiasme est moteur, mais prenez garde à ne pas négliger les enjeux éthiques et sociaux que soulèvent ces technologies.",
+    traits: ["Early adopter", "Expérimentateur", "Optimiste", "Force de proposition"],
+    color: "#a855f7"
+  },
+  A: {
+    emoji: "⚙️",
+    label: "L'Adaptateur",
+    tagline: "\"L'IA est un outil parmi d'autres — très puissant si bien utilisé.\"",
+    desc: "Vous avez une approche pragmatique et équilibrée. Vous intégrez l'IA là où elle apporte une vraie valeur, sans excès ni rejet. Vous vous formez, vous ajustez vos pratiques, et vous gardez la main sur les décisions importantes. C'est probablement le profil le mieux armé pour tirer parti de l'IA sur le long terme tout en maintenant un regard critique.",
+    traits: ["Pragmatique", "Méthodique", "Autonome", "Équilibré"],
+    color: "#60a5fa"
+  },
+  C: {
+    emoji: "🔬",
+    label: "Le Curieux",
+    tagline: "\"Je ne sais pas encore quoi en penser, mais je veux comprendre.\"",
+    desc: "L'IA vous fascine intellectuellement. Vous posez des questions, vous analysez, vous cherchez à comprendre les mécanismes avant de vous forger une opinion. Votre démarche est celle d'un explorateur : vous ne rejetez rien a priori, mais vous ne vous emballez pas non plus. Cette posture réflexive est précieuse à une époque où les discours sur l'IA sont souvent extrêmes.",
+    traits: ["Analytique", "Ouvert d'esprit", "Posé", "Chercheur de sens"],
+    color: "#34d399"
+  },
+  P: {
+    emoji: "🛡️",
+    label: "Le Prudent",
+    tagline: "\"L'IA a du potentiel, mais il faut l'encadrer sérieusement.\"",
+    desc: "Vous ne rejetez pas l'IA, mais vous refusez de l'adopter sans questionnement. Les enjeux éthiques, la vie privée, les risques sociaux : vous les prenez au sérieux. Vous utilisez l'IA de façon réfléchie, en restant vigilant sur ce que vous lui confiez. Cette prudence est une qualité — elle contribue à un usage plus responsable de la technologie.",
+    traits: ["Responsable", "Critique", "Vigilant", "Éthique"],
+    color: "#fbbf24"
+  },
+  S: {
+    emoji: "🧱",
+    label: "Le Sceptique",
+    tagline: "\"On nous vend du rêve — la réalité est bien plus complexe.\"",
+    desc: "Vous avez des doutes profonds sur l'IA : ses limites techniques, ses impacts sociaux, ses dangers éthiques. Ce scepticisme n'est pas infondé — il repose sur des observations légitimes que beaucoup ignorent. Votre rôle est précieux pour équilibrer un discours souvent trop optimiste. Restez toutefois ouvert aux usages concrets qui pourraient vous surprendre positivement.",
+    traits: ["Critique", "Indépendant", "Prudent", "Exigeant"],
+    color: "#f87171"
+  }
+};
+
+// ─── ÉTAT ─────────────────────────────────────────────────────
+let currentQ = 0;
+let answers = new Array(questions.length).fill(null);
+
+function startQuiz() {
+  document.getElementById('screen-intro').classList.add('hidden');
+  document.getElementById('screen-quiz').classList.remove('hidden');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  document.getElementById('q-number').textContent = `Question ${currentQ + 1}`;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('progress-label').textContent = `Question ${currentQ + 1} / ${questions.length}`;
+  document.getElementById('progress-bar').style.width = `${((currentQ) / questions.length) * 100}%`;
+
+  const choicesEl = document.getElementById('q-choices');
+  choicesEl.innerHTML = '';
+  q.choices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn' + (answers[currentQ] === i ? ' selected' : '');
+    btn.textContent = c.text;
+    btn.onclick = () => selectAnswer(i);
+    choicesEl.appendChild(btn);
+  });
+
+  document.getElementById('btn-prev').disabled = currentQ === 0;
+  document.getElementById('btn-next').disabled = answers[currentQ] === null;
+  document.getElementById('btn-next').textContent = currentQ === questions.length - 1 ? 'Voir mon profil →' : 'Suivant →';
+}
+
+function selectAnswer(i) {
+  answers[currentQ] = i;
+  document.querySelectorAll('.choice-btn').forEach((btn, idx) => {
+    btn.classList.toggle('selected', idx === i);
+  });
+  document.getElementById('btn-next').disabled = false;
+}
+
+function prevQuestion() {
+  if (currentQ > 0) { currentQ--; renderQuestion(); }
+}
+
+function nextQuestion() {
+  if (answers[currentQ] === null) return;
+  if (currentQ < questions.length - 1) {
+    currentQ++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+  // Calcul des scores
+  const scores = { E: 0, A: 0, P: 0, S: 0, C: 0 };
+  answers.forEach((ansIdx, qIdx) => {
+    if (ansIdx === null) return;
+    const s = questions[qIdx].choices[ansIdx].scores;
+    for (const [k, v] of Object.entries(s)) scores[k] += v;
+  });
+
+  // Profil dominant
+  const dominant = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+  const profile = profiles[dominant];
+
+  // Affichage
+  document.getElementById('screen-quiz').classList.add('hidden');
+  const resEl = document.getElementById('screen-result');
+  resEl.style.display = 'block';
+
+  document.getElementById('res-emoji').textContent = profile.emoji;
+  document.getElementById('res-profile').textContent = profile.label;
+  document.getElementById('res-tagline').textContent = profile.tagline;
+  document.getElementById('res-desc').textContent = profile.desc;
+
+  const traitsEl = document.getElementById('res-traits');
+  traitsEl.innerHTML = profile.traits.map(t => `<span class="trait">${t}</span>`).join('');
+
+  // Barres de score
+  const total = Object.values(scores).reduce((a, b) => a + b, 0) || 1;
+  const labels = { E: 'Enthousiaste', A: 'Adaptateur', P: 'Prudent', S: 'Sceptique', C: 'Curieux' };
+  const colors = { E: '#a855f7', A: '#60a5fa', P: '#fbbf24', S: '#f87171', C: '#34d399' };
+  const barsEl = document.getElementById('res-bars');
+  barsEl.innerHTML = Object.entries(scores)
+    .sort((a, b) => b[1] - a[1])
+    .map(([k, v]) => {
+      const pct = Math.round((v / total) * 100);
+      return `
+        <div class="score-bar-row">
+          <div class="score-bar-label"><span>${labels[k]}</span><span>${pct}%</span></div>
+          <div class="score-bar-bg">
+            <div class="score-bar-fg" style="width:0%;background:${colors[k]}" data-pct="${pct}"></div>
+          </div>
+        </div>`;
+    }).join('');
+
+  // Animation des barres
+  setTimeout(() => {
+    document.querySelectorAll('.score-bar-fg').forEach(el => {
+      el.style.width = el.dataset.pct + '%';
+    });
+  }, 100);
+
+  // Progress bar finale
+  document.getElementById('progress-bar').style.width = '100%';
+}
+
+function restart() {
+  currentQ = 0;
+  answers = new Array(questions.length).fill(null);
+  document.getElementById('screen-result').style.display = 'none';
+  document.getElementById('screen-quiz').classList.remove('hidden');
+  renderQuestion();
+}
+
+// ─── NAVIGATION CLAVIER ────────────────────────────────────────
+document.addEventListener('keydown', (e) => {
+  // Entrée sur l'écran d'intro → démarrer
+  if (e.key === 'Enter') {
+    const intro = document.getElementById('screen-intro');
+    const quiz  = document.getElementById('screen-quiz');
+    if (!intro.classList.contains('hidden')) {
+      e.preventDefault();
+      startQuiz();
+      return;
+    }
+    if (!quiz.classList.contains('hidden')) {
+      e.preventDefault(); // empêche le double-déclenchement via le bouton focalisé
+      nextQuestion();
+      return;
+    }
+  }
+
+  // Chiffres 1-4 → sélectionner une réponse
+  if (['1','2','3','4'].includes(e.key)) {
+    const quiz = document.getElementById('screen-quiz');
+    if (!quiz.classList.contains('hidden')) {
+      const idx = parseInt(e.key) - 1;
+      const btns = document.querySelectorAll('.choice-btn');
+      if (btns[idx]) selectAnswer(idx);
+    }
+  }
+});
+</script>
+</body>
+</html>
