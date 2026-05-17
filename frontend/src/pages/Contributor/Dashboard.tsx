@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import BatchUpload from './BatchUpload'
 import './Dashboard.css'
 
 interface User {
@@ -65,6 +66,12 @@ const Dashboard = ({ user, token }: DashboardProps) => {
 
       <div className="dashboard-tabs">
         <button
+          className={`tab ${activeTab === 'batch-upload' ? 'active' : ''}`}
+          onClick={() => setActiveTab('batch-upload')}
+        >
+          Batch Upload
+        </button>
+        <button
           className={`tab ${activeTab === 'my-contributions' ? 'active' : ''}`}
           onClick={() => setActiveTab('my-contributions')}
         >
@@ -87,6 +94,16 @@ const Dashboard = ({ user, token }: DashboardProps) => {
       </div>
 
       <div className="dashboard-content">
+        {activeTab === 'batch-upload' && (
+          <BatchUpload
+            token={token}
+            userId={user.id}
+            onUploadComplete={() => {
+              // Optionally refresh contributions after upload
+            }}
+          />
+        )}
+
         {activeTab === 'my-contributions' && (
           <div className="tab-content">
             <h2>Your Contributions</h2>
