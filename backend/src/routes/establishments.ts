@@ -11,10 +11,14 @@ router.get('/city/:cityId', async (req, res) => {
     const { cityId } = req.params;
     const { rating_min, type, validated_only } = req.query;
 
+    const ratingMinVal = Array.isArray(rating_min) ? rating_min[0] : rating_min;
+    const typeVal = Array.isArray(type) ? type[0] : type;
+    const validatedVal = Array.isArray(validated_only) ? validated_only[0] : validated_only;
+
     const establishments = await establishmentService.getEstablishmentsByCity(cityId, {
-      rating_min: rating_min ? parseFloat(rating_min as string) : undefined,
-      type: type as string,
-      validated_only: validated_only === 'true'
+      rating_min: ratingMinVal ? parseFloat(ratingMinVal as string) : undefined,
+      type: typeVal as string | undefined,
+      validated_only: validatedVal === 'true'
     });
 
     res.json(establishments);
@@ -45,10 +49,11 @@ router.get('/nearby/:latitude/:longitude', async (req, res) => {
     const { latitude, longitude } = req.params;
     const { radius } = req.query;
 
+    const radiusStr = Array.isArray(radius) ? radius[0] : (typeof radius === 'string' ? radius : undefined);
     const establishments = await establishmentService.getNearbyEstablishments(
       parseFloat(latitude),
       parseFloat(longitude),
-      radius ? parseInt(radius as string) : 5
+      radiusStr ? parseInt(radiusStr as string) : 5
     );
 
     res.json(establishments);
@@ -71,7 +76,8 @@ router.post('/', authMiddleware, requireRole(['contributor', 'validator', 'admin
 router.patch('/:id', authMiddleware, requireRole(['contributor', 'validator', 'admin']), async (req, res) => {
   try {
     const { id } = req.params;
-    const updated = await establishmentService.updateEstablishment(id, req.body);
+    const idStr = Array.isArray(id) ? id[0] : id;
+    const updated = await establishmentService.updateEstablishment(idStr, req.body);
 
     if (!updated) {
       return res.status(404).json({ error: 'Establishment not found' });
@@ -87,7 +93,8 @@ router.patch('/:id', authMiddleware, requireRole(['contributor', 'validator', 'a
 router.delete('/:id', authMiddleware, requireRole(['admin']), async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await establishmentService.deleteEstablishment(id);
+    const idStr = Array.isArray(id) ? id[0] : id;
+    const deleted = await establishmentService.deleteEstablishment(idStr);
 
     if (!deleted) {
       return res.status(404).json({ error: 'Establishment not found' });

@@ -15,7 +15,7 @@ export interface Establishment {
   foursquare_rating?: number;
   phone?: string;
   website?: string;
-  type: string;
+  type: string | string[];
   description?: string;
   status?: string;
 }
@@ -23,7 +23,10 @@ export interface Establishment {
 export class EstablishmentService {
   async createEstablishment(establishment: Establishment) {
     const id = uuidv4();
-    const { city_id, name, address, latitude, longitude, google_place_id, google_rating, google_reviews_count, foursquare_id, foursquare_rating, phone, website, type, description, status } = establishment;
+    const { city_id, name, address, latitude, longitude, google_place_id, google_rating, google_reviews_count, foursquare_id, foursquare_rating, phone, website, type: typeInput, description, status } = establishment;
+
+    // Normalize type to string
+    const type = Array.isArray(typeInput) ? typeInput[0] : typeInput;
 
     const query = `
       INSERT INTO establishments (
@@ -42,7 +45,7 @@ export class EstablishmentService {
     return result.rows[0];
   }
 
-  async getEstablishmentsByCity(city_id: string, filters?: { rating_min?: number; type?: string; validated_only?: boolean }) {
+  async getEstablishmentsByCity(city_id: string, filters?: { rating_min?: number; type?: string | string[]; validated_only?: boolean }) {
     let query = 'SELECT * FROM establishments WHERE city_id = $1';
     const params: any[] = [city_id];
 
@@ -52,8 +55,11 @@ export class EstablishmentService {
     }
 
     if (filters?.type) {
-      query += ` AND type = $${params.length + 1}`;
-      params.push(filters.type);
+      const typeStr = Array.isArray(filters.type) ? filters.type[0] : filters.type;
+      if (typeStr && typeStr !== 'undefined') {
+        query += ` AND type = $${params.length + 1}`;
+        params.push(typeStr);
+      }
     }
 
     if (filters?.validated_only) {

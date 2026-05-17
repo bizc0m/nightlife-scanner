@@ -30,9 +30,8 @@ router.post('/register', async (req: Request, res: Response) => {
 
     const token = jwt.sign(
       { id: result.rows[0].id, email: result.rows[0].email, role: result.rows[0].role },
-      process.env.JWT_SECRET || 'secret',
-      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
-    );
+      process.env.JWT_SECRET || 'secret'
+    ) as string;
 
     res.status(201).json({ user: result.rows[0], token });
   } catch (error) {
@@ -64,9 +63,8 @@ router.post('/login', async (req: Request, res: Response) => {
 
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
-      process.env.JWT_SECRET || 'secret',
-      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
-    );
+      process.env.JWT_SECRET || 'secret'
+    ) as string;
 
     res.json({ user: { id: user.id, email: user.email, username: user.username, role: user.role }, token });
   } catch (error) {
