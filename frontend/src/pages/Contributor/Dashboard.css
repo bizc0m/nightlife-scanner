@@ -1,0 +1,257 @@
+.dashboard {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.dashboard-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: white;
+  padding: 30px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.header-info {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.user-badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.dashboard-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.tab {
+  padding: 16px 24px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: #1a1a2e;
+}
+
+.tab.active {
+  color: #1a1a2e;
+  border-bottom-color: #0f3460;
+}
+
+.badge-count {
+  display: inline-block;
+  margin-left: 6px;
+  background: #ef4444;
+  color: white;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.dashboard-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+.tab-content {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tab-content h2 {
+  margin: 0 0 20px 0;
+  font-size: 22px;
+  color: #1a1a2e;
+}
+
+.tab-content > p {
+  color: #666;
+  margin: 0 0 20px 0;
+}
+
+.contributions-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.contribution-item {
+  background: #f9fafb;
+  padding: 16px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s;
+}
+
+.contribution-item:hover {
+  background: #f0f0f0;
+  border-color: #0f3460;
+}
+
+.contribution-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 8px;
+}
+
+.contribution-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #1a1a2e;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.pending {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.status-badge.approved {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.status-badge.rejected {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.contribution-type {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: #666;
+  text-transform: capitalize;
+}
+
+.date {
+  display: block;
+  color: #999;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.validator-notes {
+  margin: 12px 0 0 0;
+  padding: 8px;
+  background: white;
+  border-left: 3px solid #0f3460;
+  font-size: 13px;
+  color: #1a1a2e;
+  font-style: italic;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.empty-state p {
+  margin: 0 0 20px 0;
+  font-size: 16px;
+}
+
+.empty-state button {
+  background: #1a1a2e;
+  color: white;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.empty-state button:hover {
+  background: #16213e;
+}
+
+.guide {
+  max-width: 800px;
+}
+
+.guide-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+}
+
+.guide-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  color: #1a1a2e;
+}
+
+.guide-section ul {
+  margin: 0;
+  padding-left: 24px;
+}
+
+.guide-section li {
+  margin-bottom: 12px;
+  color: #666;
+  line-height: 1.6;
+}
+
+.guide-section strong {
+  color: #1a1a2e;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .contributions-list {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-tabs {
+    overflow-x: auto;
+  }
+
+  .tab {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+}

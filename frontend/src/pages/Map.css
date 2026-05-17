@@ -1,0 +1,133 @@
+.map-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: white;
+}
+
+.map-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: white;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-content h1 {
+  margin: 0;
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.header-content p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 14px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.user-info {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.map-controls {
+  display: flex;
+  gap: 16px;
+  padding: 16px 20px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  align-items: flex-end;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 150px;
+}
+
+.control-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.control-group input,
+.control-group select {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.map-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.marker-popup {
+  min-width: 200px;
+}
+
+.marker-popup h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: #1a1a2e;
+}
+
+.marker-popup .address {
+  margin: 0 0 8px 0;
+  font-size: 12px;
+  color: #666;
+}
+
+.marker-popup .rating {
+  margin: 0 0 12px 0;
+  font-weight: 600;
+  color: #f59e0b;
+}
+
+.marker-popup button {
+  width: 100%;
+}
+
+.results-summary {
+  padding: 12px 20px;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .map-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .map-controls {
+    flex-wrap: wrap;
+  }
+
+  .control-group {
+    min-width: 120px;
+  }
+}
